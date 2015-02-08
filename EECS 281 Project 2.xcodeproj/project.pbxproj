@@ -7,7 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		27F9D9F01A86BA0400FBE7A0 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 27F9D9EF1A86BA0400FBE7A0 /* main.cpp */; };
+		272D14081A870934006DFDB6 /* Makefile in Sources */ = {isa = PBXBuildFile; fileRef = 272D14021A870934006DFDB6 /* Makefile */; };
+		272D14091A870934006DFDB6 /* testPQ.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 272D14071A870934006DFDB6 /* testPQ.cpp */; };
+		272D140E1A87098F006DFDB6 /* market.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 272D140C1A87098F006DFDB6 /* market.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -23,8 +25,18 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		272D14001A870934006DFDB6 /* BinaryPQ.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BinaryPQ.h; sourceTree = SOURCE_ROOT; };
+		272D14011A870934006DFDB6 /* Eecs281PQ.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Eecs281PQ.h; sourceTree = SOURCE_ROOT; };
+		272D14021A870934006DFDB6 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = SOURCE_ROOT; };
+		272D14031A870934006DFDB6 /* P2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = P2.h; sourceTree = SOURCE_ROOT; };
+		272D14041A870934006DFDB6 /* PairingPQ.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PairingPQ.h; sourceTree = SOURCE_ROOT; };
+		272D14051A870934006DFDB6 /* README */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README; sourceTree = SOURCE_ROOT; };
+		272D14061A870934006DFDB6 /* SortedPQ.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SortedPQ.h; sourceTree = SOURCE_ROOT; };
+		272D14071A870934006DFDB6 /* testPQ.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = testPQ.cpp; sourceTree = SOURCE_ROOT; };
+		272D140C1A87098F006DFDB6 /* market.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = market.cpp; sourceTree = SOURCE_ROOT; };
+		272D140D1A87098F006DFDB6 /* market.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = market.h; sourceTree = SOURCE_ROOT; };
+		272D140F1A870DF9006DFDB6 /* Order.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Order.h; sourceTree = SOURCE_ROOT; };
 		27F9D9EC1A86BA0400FBE7A0 /* EECS 281 Project 2 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "EECS 281 Project 2"; sourceTree = BUILT_PRODUCTS_DIR; };
-		27F9D9EF1A86BA0400FBE7A0 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -38,6 +50,29 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		272D140A1A870950006DFDB6 /* Part B */ = {
+			isa = PBXGroup;
+			children = (
+				272D14001A870934006DFDB6 /* BinaryPQ.h */,
+				272D14011A870934006DFDB6 /* Eecs281PQ.h */,
+				272D14041A870934006DFDB6 /* PairingPQ.h */,
+				272D14061A870934006DFDB6 /* SortedPQ.h */,
+				272D14071A870934006DFDB6 /* testPQ.cpp */,
+			);
+			name = "Part B";
+			sourceTree = "<group>";
+		};
+		272D140B1A870964006DFDB6 /* Part A */ = {
+			isa = PBXGroup;
+			children = (
+				272D14031A870934006DFDB6 /* P2.h */,
+				272D140D1A87098F006DFDB6 /* market.h */,
+				272D140C1A87098F006DFDB6 /* market.cpp */,
+				272D140F1A870DF9006DFDB6 /* Order.h */,
+			);
+			name = "Part A";
+			sourceTree = "<group>";
+		};
 		27F9D9E31A86BA0400FBE7A0 = {
 			isa = PBXGroup;
 			children = (
@@ -57,7 +92,10 @@
 		27F9D9EE1A86BA0400FBE7A0 /* EECS 281 Project 2 */ = {
 			isa = PBXGroup;
 			children = (
-				27F9D9EF1A86BA0400FBE7A0 /* main.cpp */,
+				272D140B1A870964006DFDB6 /* Part A */,
+				272D140A1A870950006DFDB6 /* Part B */,
+				272D14051A870934006DFDB6 /* README */,
+				272D14021A870934006DFDB6 /* Makefile */,
 			);
 			path = "EECS 281 Project 2";
 			sourceTree = "<group>";
@@ -118,7 +156,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				27F9D9F01A86BA0400FBE7A0 /* main.cpp in Sources */,
+				272D140E1A87098F006DFDB6 /* market.cpp in Sources */,
+				272D14091A870934006DFDB6 /* testPQ.cpp in Sources */,
+				272D14081A870934006DFDB6 /* Makefile in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -232,6 +272,7 @@
 				27F9D9F51A86BA0400FBE7A0 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
