@@ -190,8 +190,8 @@ help:
 jtest: market.cpp market.h P2.h Order.h
 	g++ $(CXXFLAGS) -O3 market.cpp -o market
 ## These next two are only useful when cerr input is added
-#	./market < test-TL-input.txt
-#	./market < test-PR-input.txt
+	./market < test-TL-input.txt
+	./market < test-PR-input.txt
 
 #######################
 # TODO (begin) #

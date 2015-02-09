@@ -8,7 +8,6 @@
 
 #include "market.h"
 #include "Order.h"
-#include "MarketStructure.h"
 #include "P2.h"
 
 #include <cstdlib>
@@ -17,6 +16,7 @@
 #include <getopt.h>
 
 #include <string>
+#include <queue>
 
 using namespace std;
 
@@ -51,9 +51,9 @@ int main(int argc, char *argv[]) {
 	///////////////////////////////////////////////////////////////////
 
 	// Declare variables
-	MarketStructure stock_market;
+	vector <priority_queue <Order*> > stock_market;
 
-	vector< list <int> >* median_list;
+//	vector< list <int> >* median_list;
 
 	MarketMode mode = NONE;
 	Verbose verbose = NO_VERBOSE;
@@ -65,7 +65,7 @@ int main(int argc, char *argv[]) {
 	stringstream in_ss;
 	ostringstream out_ss;
 
-	int current_timestamp = 0;
+//	int current_timestamp = 0;
 
 	parse_command_line_input(argc, argv, verbose, median, client_info, time_travelers);
 
@@ -89,7 +89,7 @@ int main(int argc, char *argv[]) {
 	equities_str = input_str.substr(14, input_str.length() - 13);
 	const int NUM_EQUITIES = atoi(equities_str.c_str());
 
-	stock_market = MarketStructure(NUM_EQUITIES);
+	stock_market = vector <priority_queue <Order*> >(NUM_EQUITIES);
 
 	// cerr input // FOR TESTING ONLY, REMOVE LATER ///
 //	if (mode == TRADELIST) {
@@ -122,8 +122,8 @@ int main(int argc, char *argv[]) {
 		//////////////////////////////////////////////////
 	}
 
-	istream& input_stream = (mode == TRADELIST) ? cin : in_ss;
-
+//	istream& input_stream = (mode == TRADELIST) ? cin : in_ss;
+/*
 	cout << "Processing orders...\n";
 	// Run the market
 	while (getline(input_stream, input_str)) {
@@ -138,13 +138,13 @@ int main(int argc, char *argv[]) {
 			current_timestamp = order_ptr->getTimestamp();
 		}
 
-		stock_market.make_matches(order_ptr, verbose == YES_VERBOSE);
+//		stock_market.make_matches(order_ptr, verbose == YES_VERBOSE);
 	}
 
-	if (median_list) {
-		delete median_list; median_list = NULL;
-	}
-
+//	if (median_list) {
+//		delete median_list; median_list = NULL;
+//	}
+*/
 	return 0;
 }
 
