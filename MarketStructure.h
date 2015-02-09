@@ -11,6 +11,7 @@
 
 #include <stdio.h>
 #include <vector>
+#include <list>
 
 #include "Order.h"
 
@@ -22,10 +23,11 @@ public:
 	~MarketStructure();
 
 	void add_order(Order* order);
-	
+	void make_matches(Order* order, bool verbose);
 
 private:
-	vector <vector <Order> >* structure;
+	vector <list <Order*> >* market_structure;
+	vector <vector <int> >* median_structure;
 };
 
 #endif /* defined(__EECS_281_Project_2__MarketStructure__) */

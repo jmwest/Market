@@ -8,6 +8,7 @@
 
 #include "market.h"
 #include "Order.h"
+#include "MarketStructure.h"
 #include "P2.h"
 
 #include <cstdlib>
@@ -49,6 +50,11 @@ int main(int argc, char *argv[]) {
 	ios_base::sync_with_stdio(false);								///
 	///////////////////////////////////////////////////////////////////
 
+	// Declare variables
+	MarketStructure stock_market;
+
+	vector< list <int> >* median_list;
+
 	MarketMode mode = NONE;
 	Verbose verbose = NO_VERBOSE;
 	Median median = NO_MEDIAN;
@@ -56,12 +62,14 @@ int main(int argc, char *argv[]) {
 	TimeTravelers time_travelers = NO_TIME_TRAVELERS;
 
 	string input_str, clients_str, equities_str;
-	stringstream ss;
+	stringstream in_ss;
+	ostringstream out_ss;
 
 	int current_timestamp = 0;
 
 	parse_command_line_input(argc, argv, verbose, median, client_info, time_travelers);
 
+	// Pull in initial info
 	getline(cin, input_str);
 
 	if (input_str.at(6) == 'T') {
@@ -81,11 +89,13 @@ int main(int argc, char *argv[]) {
 	equities_str = input_str.substr(14, input_str.length() - 13);
 	const int NUM_EQUITIES = atoi(equities_str.c_str());
 
-	// cerr input // FOR TESTING ONLY REMOVE LATER //
-	if (mode == TRADELIST) {
-		cerr << "TL\nNUM_CLIENTS: " << NUM_CLIENTS << "\nNUM_EQUITIES: " << NUM_EQUITIES << endl;
-	}
-	/////////////////////////////////////////////////
+	stock_market = MarketStructure(NUM_EQUITIES);
+
+	// cerr input // FOR TESTING ONLY, REMOVE LATER ///
+//	if (mode == TRADELIST) {
+//		cerr << "TL\nNUM_CLIENTS: " << NUM_CLIENTS << "\nNUM_EQUITIES: " << NUM_EQUITIES << endl;
+//	}
+	//////////////////////////////////////////////////
 
 	if (mode == PSEUDORANDOM) {
 		int seed;
@@ -104,21 +114,35 @@ int main(int argc, char *argv[]) {
 
 		arrival_rate = atoi(input_str.substr(14, input_str.length() - 14).c_str());
 
-		P2::PR_init(ss, seed, NUM_EQUITIES, NUM_CLIENTS, number_of_orders, arrival_rate);
+		P2::PR_init(in_ss, seed, NUM_EQUITIES, NUM_CLIENTS, number_of_orders, arrival_rate);
 
-		// cerr input // FOR TESTING ONLY REMOVE LATER //
-		cerr << "PR\nNUM_CLIENTS: " << NUM_CLIENTS << "\nNUM_EQUITIES: " << NUM_EQUITIES;
-		cerr << "\nseed: " << seed << "\nnum_orders: " << number_of_orders << "\narrival_rate: " << arrival_rate << endl;
-		/////////////////////////////////////////////////
+		// cerr input // FOR TESTING ONLY, REMOVE LATER //
+//		cerr << "PR\nNUM_CLIENTS: " << NUM_CLIENTS << "\nNUM_EQUITIES: " << NUM_EQUITIES;
+//		cerr << "\nseed: " << seed << "\nnum_orders: " << number_of_orders << "\narrival_rate: " << arrival_rate << endl;
+		//////////////////////////////////////////////////
 	}
 
-	istream& input_stream = (mode == TRADELIST) ? cin : ss;
+	istream& input_stream = (mode == TRADELIST) ? cin : in_ss;
 
+	cout << "Processing orders...\n";
+	// Run the market
 	while (getline(input_stream, input_str)) {
 		Order* order_ptr = create_order_from_input(&input_str, NUM_CLIENTS, NUM_EQUITIES,
 												   current_timestamp);
+		if (current_timestamp != order_ptr->getTimestamp()) {
+			// add more for median in the future
+			if (median == YES_MEDIAN) {
+				output_median();
+			}
 
-		
+			current_timestamp = order_ptr->getTimestamp();
+		}
+
+		stock_market.make_matches(order_ptr, verbose == YES_VERBOSE);
+	}
+
+	if (median_list) {
+		delete median_list; median_list = NULL;
 	}
 
 	return 0;

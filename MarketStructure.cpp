@@ -8,61 +8,86 @@
 
 #include "MarketStructure.h"
 
-void binary_insertion_price(vector <Order>* vec, Order* order);
-
-void binary_insertion_timestamp(vector <Order>* vec, Order* order,
-								int lower, int upper);
-
 MarketStructure::MarketStructure() {
-	structure = new vector <vector <Order> >();
+	market_structure = new vector <list <Order*> >();
 }
 
 MarketStructure::MarketStructure(int structure_size) {
-	structure = new vector <vector <Order> >(structure_size);
+	market_structure = new vector <list <Order*> >(structure_size);
+	median_structure = new vector <vector <int> >(structure_size);
 }
 
 MarketStructure::~MarketStructure() {
-	delete structure; structure = NULL;
+	delete market_structure; market_structure = NULL;
+	delete median_structure; median_structure = NULL;
 }
 
 void MarketStructure::add_order(Order* order) {
 
-	binary_insertion_price(&structure->at(order->getEquityId()), order);
+	if (!market_structure->at(order->getEquityId()).empty()) {
+		market_structure->at(order->getEquityId()).push_back(order);
+	}
+	else {
+		for (list <Order*>::iterator it = market_structure->at(order->getEquityId()).begin();
+			 it != market_structure->at(order->getEquityId()).end();) {
+			if ((*it)->getPrice() > order->getPrice()) {
+				market_structure->at(order->getEquityId()).insert(it, order);
 
-	return;
-}
-
-void binary_insertion_price(vector <Order>* vec, Order* order) {
-	int b = 0, e = (int)vec->size();
-	int m;
-	while (b != e) {
-		m = (b + e) / 2;
-
-		if (vec->at(m).getPrice() > order->getPrice()) {
-			e = m;
-		}
-		else if (vec->at(m).getPrice() < order->getPrice()) {
-			if (b == m) {
-				if (vec->at(m + 1).getPrice() < order->getPrice()) {
-					
-				}
-				
+				break;
 			}
-	
-			b = m;
-		}
-		else {
-			
+
+			if (++it == market_structure->at(order->getEquityId()).end()) {
+				market_structure->at(order->getEquityId()).push_back(order);
+			}
 		}
 	}
 
 	return;
 }
 
-void binary_insertion_timestamp(vector <Order>* vec, Order* order,
-								int lower, int upper) {
-	
+void MarketStructure::make_matches(Order* order, bool verbose) {
+	list <Order*>* equity_list = &market_structure->at(order->getEquityId());
+
+	Order::Transaction desired_transaction;
+	list <Order*>::iterator it;
+	list <Order*>::iterator end;
+	if (order->getTransaction() == Order::BUY) {
+		desired_transaction = Order::SELL;
+		it = equity_list->begin();
+		end = equity_list->end();
+	}
+	else {
+		desired_transaction = Order::BUY;
+		it = equity_list->end();
+		end = equity_list->begin();
+	}
+
+	for ( ; it != end; (desired_transaction == Order::SELL) ? ++it : --it) {
+
+	}
+
+	equity_list = NULL;
 
 	return;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
