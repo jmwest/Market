@@ -63,10 +63,10 @@ OBJECTS		= $(SOURCES:%.cpp=%.o)
 
 # TODO
 # If main() is in a file named project*.cpp, use the following line
-PROJECTFILE = $(wildcard project*.cpp)
+#PROJECTFILE = $(wildcard project*.cpp)
 # TODO
 # If main() is in another file delete the line above, edit and uncomment below
-#PROJECTFILE = mymainfile.cpp
+PROJECTFILE = market.cpp
 
 # name of the tar ball created for submission
 PARTIAL_SUBMITFILE = partialsubmit.tar.gz
@@ -183,6 +183,15 @@ export MAKEFILE_HELP
 
 help:
 	@echo "$$MAKEFILE_HELP"
+
+#####################
+# MY OWN TEST CASES #
+#####################
+jtest: market.cpp market.h P2.h Order.h
+	g++ $(CXXFLAGS) -O3 market.cpp -o market
+## These next two are only useful when cerr input is added
+#	./market < test-TL-input.txt
+#	./market < test-PR-input.txt
 
 #######################
 # TODO (begin) #

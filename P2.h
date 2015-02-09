@@ -8,7 +8,7 @@
 
 class P2 {
 public:
-  static void PRstream(std::stringstream& ss, int seed, int num_equities, int num_clients, int num_orders, int arrival_rate);
+  static void PR_init(std::stringstream& ss, int seed, int num_equities, int num_clients, int num_orders, int arrival_rate);
   // static std::stringstream PRstream(int seed, int num_equities, int num_clients, int num_orders, int arrival_rate);
   //Don't need to read further than this, unless you want to learn about
   //Mersenne Twister implementation
@@ -67,7 +67,7 @@ private:
 
 P2::MersenneTwister P2::mt;
 
-void P2::PRstream(std::stringstream& ss, int seed, int num_equities, int num_clients, int num_orders, int arrival_rate) 
+void P2::PR_init(std::stringstream& ss, int seed, int num_equities, int num_clients, int num_orders, int arrival_rate)
 {
   int max_price = 1000, max_quantity = 1000;
   mt.init_genrand(seed);
@@ -91,15 +91,15 @@ void P2::PRstream(std::stringstream& ss, int seed, int num_equities, int num_cli
  * Takuji Nishimura and Makoto Matsumoto.
  */
 
-/* 
+/*
    A C-program for MT19937, with initialization improved 2002/1/26.
    Coded by Takuji Nishimura and Makoto Matsumoto.
 
-   Before using, initialize the state by using init_genrand(seed)  
+   Before using, initialize the state by using init_genrand(seed)
    or init_by_array(init_key, key_length).
 
    Copyright (C) 1997 - 2002, Makoto Matsumoto and Takuji Nishimura,
-   All rights reserved.                          
+   All rights reserved.
 
    Redistribution and use in source and binary forms, with or without
    modification, are permitted provided that the following conditions
@@ -112,8 +112,8 @@ void P2::PRstream(std::stringstream& ss, int seed, int num_equities, int num_cli
         notice, this list of conditions and the following disclaimer in the
         documentation and/or other materials provided with the distribution.
 
-     3. The names of its contributors may not be used to endorse or promote 
-        products derived from this software without specific prior written 
+     3. The names of its contributors may not be used to endorse or promote
+        products derived from this software without specific prior written
         permission.
 
    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
@@ -163,8 +163,8 @@ void P2::MersenneTwister::init_genrand(unsigned long s)
 {
     mt_[0]= s & 0xffffffffUL;
     for (mti_=1; mti_<N; mti_++) {
-        mt_[mti_] = 
-      (1812433253UL * (mt_[mti_-1] ^ (mt_[mti_-1] >> 30)) + mti_); 
+        mt_[mti_] =
+      (1812433253UL * (mt_[mti_-1] ^ (mt_[mti_-1] >> 30)) + mti_);
         /* See Knuth TAOCP Vol2. 3rd Ed. P.106 for multiplier. */
         /* In the previous versions, MSBs of the seed affect   */
         /* only MSBs of the array mt_[].                        */
@@ -208,7 +208,7 @@ unsigned long P2::MersenneTwister::genrand_int32(void)
 
         mti_ = 0;
     }
-  
+
     y = mt_[mti_++];
 
     /* Tempering */
@@ -220,4 +220,4 @@ unsigned long P2::MersenneTwister::genrand_int32(void)
     return y;
 }
 
-#endif 
+#endif

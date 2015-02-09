@@ -9,6 +9,10 @@
 #ifndef EECS_281_Project_2_Order_h
 #define EECS_281_Project_2_Order_h
 
+#include <iostream>
+
+using namespace std;
+
 class Order {
 public:
 	enum Transaction {NONE, BUY, SELL};
@@ -39,8 +43,7 @@ private:
 
 Order::Order()
 : timestamp(0), client_id(0), transaction(NONE),
-equity_id(0), price(0), quantity(0), num_clients(0),
-num_equities(0) {}
+equity_id(0), price(0), quantity(0) {}
 
 Order::Order(int time_stamp_in, int client_in, Transaction transaction_in,
 			 int equity_in, int price_in, int quantity_in, int num_clients_in,
@@ -77,7 +80,7 @@ int Order::getClientId() {
 	return client_id;
 }
 
-Order::Transaction Order::getRransaction() {
+Order::Transaction Order::getTransaction() {
 	return transaction;
 }
 

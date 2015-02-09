@@ -32,7 +32,8 @@ enum TimeTravelers {NO_TIME_TRAVELERS, YES_TIME_TRAVELERS};
 void parse_command_line_input(int & argc, char *argv[], Verbose &verbose, Median &median,
 							  ClientInfo &client_info, TimeTravelers &time_travelers);
 
-
+Order* create_order_from_input(string* str, const int NUM_CLIENTS,
+							   const int NUM_EQUITIES, int current_time);
 
 void output_verbose();
 
@@ -57,6 +58,8 @@ int main(int argc, char *argv[]) {
 	string input_str, clients_str, equities_str;
 	stringstream ss;
 
+	int current_timestamp = 0;
+
 	parse_command_line_input(argc, argv, verbose, median, client_info, time_travelers);
 
 	getline(cin, input_str);
@@ -70,13 +73,19 @@ int main(int argc, char *argv[]) {
 
 	getline(cin, input_str);
 
-	clients_str = input_str.substr(13, input_str.length() - 14);
+	clients_str = input_str.substr(13, input_str.length() - 13);
 	const int NUM_CLIENTS = atoi(clients_str.c_str());
 
 	getline(cin, input_str);
 
-	equities_str = input_str.substr(14, input_str.length() - 15);
+	equities_str = input_str.substr(14, input_str.length() - 13);
 	const int NUM_EQUITIES = atoi(equities_str.c_str());
+
+	// cerr input // FOR TESTING ONLY REMOVE LATER //
+	if (mode == TRADELIST) {
+		cerr << "TL\nNUM_CLIENTS: " << NUM_CLIENTS << "\nNUM_EQUITIES: " << NUM_EQUITIES << endl;
+	}
+	/////////////////////////////////////////////////
 
 	if (mode == PSEUDORANDOM) {
 		int seed;
@@ -85,17 +94,31 @@ int main(int argc, char *argv[]) {
 
 		getline(cin, input_str);
 
-		seed = atoi(input_str.substr(13, input_str.length() - 14).c_str());
+		seed = atoi(input_str.substr(13, input_str.length() - 13).c_str());
 
 		getline(cin, input_str);
 
-		number_of_orders = atoi(input_str.substr(18, input_str.length() - 19).c_str());
+		number_of_orders = atoi(input_str.substr(18, input_str.length() - 18).c_str());
 
 		getline(cin, input_str);
 
-		arrival_rate = atoi(input_str.substr(14, input_str.length() - 15).c_str());
+		arrival_rate = atoi(input_str.substr(14, input_str.length() - 14).c_str());
 
-		P2::PRstream(ss, seed, NUM_EQUITIES, NUM_CLIENTS, number_of_orders, arrival_rate);
+		P2::PR_init(ss, seed, NUM_EQUITIES, NUM_CLIENTS, number_of_orders, arrival_rate);
+
+		// cerr input // FOR TESTING ONLY REMOVE LATER //
+		cerr << "PR\nNUM_CLIENTS: " << NUM_CLIENTS << "\nNUM_EQUITIES: " << NUM_EQUITIES;
+		cerr << "\nseed: " << seed << "\nnum_orders: " << number_of_orders << "\narrival_rate: " << arrival_rate << endl;
+		/////////////////////////////////////////////////
+	}
+
+	istream& input_stream = (mode == TRADELIST) ? cin : ss;
+
+	while (getline(input_stream, input_str)) {
+		Order* order_ptr = create_order_from_input(&input_str, NUM_CLIENTS, NUM_EQUITIES,
+												   current_timestamp);
+
+		
 	}
 
 	return 0;
@@ -136,9 +159,58 @@ void parse_command_line_input(int & argc, char *argv[], Verbose &verbose, Median
 				break;
 		}
 	}
-	
-	// Check for necessary conditions:
+}
 
+Order* create_order_from_input(string* str, const int NUM_CLIENTS,
+							   const int NUM_EQUITIES, int current_time) {
+	int t_stamp = 0, c_id = 0, e_id = 0, price = 0, quant = 0;
+	Order::Transaction action = Order::NONE;
+
+	int current_idx = 0;
+	for (int i = 0; i <= (int)str->length(); ++i) {
+		if ((str->at(i) == ' ') || (i == (int)str->length())) {
+			switch (str->at(current_idx)) {
+				case 'C':
+					c_id = stoi(str->substr(current_idx + 1, i - current_idx - 1));
+					break;
+
+				case 'B':
+					action = Order::BUY;
+					break;
+
+				case 'S':
+					action = Order::SELL;
+					break;
+
+				case 'E':
+					e_id = stoi(str->substr(current_idx + 1, i - current_idx - 1));
+					break;
+
+				case '$':
+					price = stoi(str->substr(current_idx + 1, i - current_idx - 1));
+					break;
+
+				case '#':
+					quant = stoi(str->substr(current_idx + 1, i - current_idx - 1));
+					break;
+
+				default:
+					t_stamp = stoi(str->substr(current_idx, i - current_idx));
+					break;
+			}
+
+			current_idx = i + 1;
+		}
+	}
+
+	// Check that timestamp isn't bad
+	if (t_stamp < current_time) {
+		cerr << "Timestamp for an order was less than current time. exit(1)" << endl;
+		exit(1);
+	}
+
+	return new Order(t_stamp, c_id, action, e_id, price, quant,
+					 NUM_CLIENTS, NUM_EQUITIES);
 }
 
 void output_verbose() {
