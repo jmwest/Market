@@ -10,6 +10,7 @@
 		272D14081A870934006DFDB6 /* Makefile in Sources */ = {isa = PBXBuildFile; fileRef = 272D14021A870934006DFDB6 /* Makefile */; };
 		272D14091A870934006DFDB6 /* testPQ.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 272D14071A870934006DFDB6 /* testPQ.cpp */; };
 		272D140E1A87098F006DFDB6 /* market.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 272D140C1A87098F006DFDB6 /* market.cpp */; };
+		27BA1B941A8A77E600A08A58 /* test-A-jmw.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 27BA1B921A8A77E600A08A58 /* test-A-jmw.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -36,6 +37,8 @@
 		272D140C1A87098F006DFDB6 /* market.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = market.cpp; sourceTree = SOURCE_ROOT; };
 		272D140D1A87098F006DFDB6 /* market.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = market.h; sourceTree = SOURCE_ROOT; };
 		272D140F1A870DF9006DFDB6 /* Order.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Order.h; sourceTree = SOURCE_ROOT; };
+		27BA1B921A8A77E600A08A58 /* test-A-jmw.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = "test-A-jmw.cpp"; sourceTree = SOURCE_ROOT; };
+		27BA1B931A8A77E600A08A58 /* test-A-jmw.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "test-A-jmw.h"; sourceTree = SOURCE_ROOT; };
 		27C824641A87E58B00604C71 /* test-TL-input.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "test-TL-input.txt"; sourceTree = SOURCE_ROOT; };
 		27C824651A87E65600604C71 /* test-PR-input.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "test-PR-input.txt"; sourceTree = SOURCE_ROOT; };
 		27F9D9EC1A86BA0400FBE7A0 /* EECS 281 Project 2 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "EECS 281 Project 2"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -73,8 +76,18 @@
 				272D140F1A870DF9006DFDB6 /* Order.h */,
 				27C824641A87E58B00604C71 /* test-TL-input.txt */,
 				27C824651A87E65600604C71 /* test-PR-input.txt */,
+				27BA1B8F1A8A779400A08A58 /* Test A */,
 			);
 			name = "Part A";
+			sourceTree = "<group>";
+		};
+		27BA1B8F1A8A779400A08A58 /* Test A */ = {
+			isa = PBXGroup;
+			children = (
+				27BA1B931A8A77E600A08A58 /* test-A-jmw.h */,
+				27BA1B921A8A77E600A08A58 /* test-A-jmw.cpp */,
+			);
+			name = "Test A";
 			sourceTree = "<group>";
 		};
 		27F9D9E31A86BA0400FBE7A0 = {
@@ -161,6 +174,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				272D140E1A87098F006DFDB6 /* market.cpp in Sources */,
+				27BA1B941A8A77E600A08A58 /* test-A-jmw.cpp in Sources */,
 				272D14091A870934006DFDB6 /* testPQ.cpp in Sources */,
 				272D14081A870934006DFDB6 /* Makefile in Sources */,
 			);

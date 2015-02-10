@@ -41,6 +41,26 @@ private:
 
 };
 
+class OrderComparison {
+public:
+	bool operator () (Order* ord1, Order* ord2) {
+		if (ord1->getPrice() > ord2->getPrice()) {
+			return true;
+		}
+		else if (ord1->getPrice() < ord2->getPrice()) {
+			return false;
+		}
+		else {
+			if (ord1->getTimestamp() > ord2->getTimestamp()) {
+				return true;
+			}
+			else {
+				return false;
+			}
+		}
+	}
+};
+
 Order::Order()
 : timestamp(0), client_id(0), transaction(NONE),
 equity_id(0), price(0), quantity(0) {}

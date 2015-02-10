@@ -20,6 +20,8 @@
 
 using namespace std;
 
+typedef priority_queue <Order*, vector <Order*>, OrderComparison> Orderpq;
+
 enum MarketMode {NONE, TRADELIST, PSEUDORANDOM};
 enum Verbose {NO_VERBOSE, YES_VERBOSE};
 enum Median {NO_MEDIAN, YES_MEDIAN};
@@ -36,6 +38,8 @@ void parse_command_line_input(int & argc, char *argv[], Verbose &verbose, Median
 Order* create_order_from_input(string* str, const int NUM_CLIENTS,
 							   const int NUM_EQUITIES, int current_time);
 
+void make_matches(vector <Orderpq>* market, Order* order);
+
 void output_verbose();
 
 void output_median();
@@ -51,9 +55,10 @@ int main(int argc, char *argv[]) {
 	///////////////////////////////////////////////////////////////////
 
 	// Declare variables
-	vector <priority_queue <Order*> > stock_market;
+	vector <Orderpq> stock_market;
 
-//	vector< list <int> >* median_list;
+	// include when beginning median data
+//	vector< vector <int> >* median_list;
 
 	MarketMode mode = NONE;
 	Verbose verbose = NO_VERBOSE;
@@ -65,7 +70,8 @@ int main(int argc, char *argv[]) {
 	stringstream in_ss;
 	ostringstream out_ss;
 
-//	int current_timestamp = 0;
+	int current_timestamp = 0;
+//	int orders_processed = 0;
 
 	parse_command_line_input(argc, argv, verbose, median, client_info, time_travelers);
 
@@ -89,13 +95,7 @@ int main(int argc, char *argv[]) {
 	equities_str = input_str.substr(14, input_str.length() - 13);
 	const int NUM_EQUITIES = atoi(equities_str.c_str());
 
-	stock_market = vector <priority_queue <Order*> >(NUM_EQUITIES);
-
-	// cerr input // FOR TESTING ONLY, REMOVE LATER ///
-//	if (mode == TRADELIST) {
-//		cerr << "TL\nNUM_CLIENTS: " << NUM_CLIENTS << "\nNUM_EQUITIES: " << NUM_EQUITIES << endl;
-//	}
-	//////////////////////////////////////////////////
+	stock_market = vector <Orderpq> (NUM_EQUITIES);
 
 	if (mode == PSEUDORANDOM) {
 		int seed;
@@ -115,15 +115,10 @@ int main(int argc, char *argv[]) {
 		arrival_rate = atoi(input_str.substr(14, input_str.length() - 14).c_str());
 
 		P2::PR_init(in_ss, seed, NUM_EQUITIES, NUM_CLIENTS, number_of_orders, arrival_rate);
-
-		// cerr input // FOR TESTING ONLY, REMOVE LATER //
-//		cerr << "PR\nNUM_CLIENTS: " << NUM_CLIENTS << "\nNUM_EQUITIES: " << NUM_EQUITIES;
-//		cerr << "\nseed: " << seed << "\nnum_orders: " << number_of_orders << "\narrival_rate: " << arrival_rate << endl;
-		//////////////////////////////////////////////////
 	}
 
-//	istream& input_stream = (mode == TRADELIST) ? cin : in_ss;
-/*
+	istream& input_stream = (mode == TRADELIST) ? cin : in_ss;
+
 	cout << "Processing orders...\n";
 	// Run the market
 	while (getline(input_stream, input_str)) {
@@ -138,13 +133,13 @@ int main(int argc, char *argv[]) {
 			current_timestamp = order_ptr->getTimestamp();
 		}
 
-//		stock_market.make_matches(order_ptr, verbose == YES_VERBOSE);
+		make_matches(&stock_market, order_ptr);
 	}
 
 //	if (median_list) {
 //		delete median_list; median_list = NULL;
 //	}
-*/
+
 	return 0;
 }
 
@@ -235,6 +230,14 @@ Order* create_order_from_input(string* str, const int NUM_CLIENTS,
 
 	return new Order(t_stamp, c_id, action, e_id, price, quant,
 					 NUM_CLIENTS, NUM_EQUITIES);
+}
+
+void make_matches(vector <Orderpq>* market, Order* order) {
+	Orderpq market_cpy = market->at(order->getEquityId());
+
+	
+
+	return;
 }
 
 void output_verbose() {
