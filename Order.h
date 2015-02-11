@@ -29,7 +29,7 @@ public:
 	int getPrice();
 	int getQuantity();
 
-	void changeQuantity(int new_quantity);
+	void changeQuantity(int change_in_quantity);
 
 private:
 	int timestamp;
@@ -116,8 +116,8 @@ int Order::getQuantity() {
 	return quantity;
 }
 
-void Order::changeQuantity(int new_quantity) {
-	quantity = new_quantity;
+void Order::changeQuantity(int change_in_quantity) {
+	quantity = quantity - change_in_quantity;
 
 	return;
 }

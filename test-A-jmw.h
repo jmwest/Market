@@ -10,5 +10,38 @@
 #define __EECS_281_Project_2__test_A_jmw__
 
 #include <stdio.h>
+#include <queue>
+
+#include "Order.h"
+
+typedef priority_queue <Order*, vector <Order*>, OrderComparison> Orderpq;
+
+enum MarketMode {NONE, TRADELIST, PSEUDORANDOM};
+enum Verbose {NO_VERBOSE, YES_VERBOSE};
+enum Median {NO_MEDIAN, YES_MEDIAN};
+enum ClientInfo {NO_CLIENT_INFO, YES_CLIENT_INFO};
+enum TimeTravelers {NO_TIME_TRAVELERS, YES_TIME_TRAVELERS};
+
+// REQUIRES:
+// MODIFIES: begin, end, rout, modify, and output.
+// EFFECTS: uses argc and argv that are passed into the program
+//			to give values to begin, end, rout, modify, and output.
+void parse_command_line_input(int & argc, char *argv[], Verbose &verbose, Median &median,
+							  ClientInfo &client_info, TimeTravelers &time_travelers);
+
+Order* create_order_from_input(string* str, const int NUM_CLIENTS,
+							   const int NUM_EQUITIES, int current_time);
+
+void make_matches(vector <Orderpq>* market, Order* order);
+
+bool can_trade(Order* ord1, Order* ord2);
+
+void output_verbose();
+
+void output_median();
+
+void output_client_info();
+
+void output_time_travelers();
 
 #endif /* defined(__EECS_281_Project_2__text_A_jmw__) */

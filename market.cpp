@@ -7,7 +7,6 @@
 //
 
 #include "market.h"
-#include "Order.h"
 #include "P2.h"
 
 #include <cstdlib>
@@ -16,37 +15,8 @@
 #include <getopt.h>
 
 #include <string>
-#include <queue>
 
 using namespace std;
-
-typedef priority_queue <Order*, vector <Order*>, OrderComparison> Orderpq;
-
-enum MarketMode {NONE, TRADELIST, PSEUDORANDOM};
-enum Verbose {NO_VERBOSE, YES_VERBOSE};
-enum Median {NO_MEDIAN, YES_MEDIAN};
-enum ClientInfo {NO_CLIENT_INFO, YES_CLIENT_INFO};
-enum TimeTravelers {NO_TIME_TRAVELERS, YES_TIME_TRAVELERS};
-
-// REQUIRES:
-// MODIFIES: begin, end, rout, modify, and output.
-// EFFECTS: uses argc and argv that are passed into the program
-//			to give values to begin, end, rout, modify, and output.
-void parse_command_line_input(int & argc, char *argv[], Verbose &verbose, Median &median,
-							  ClientInfo &client_info, TimeTravelers &time_travelers);
-
-Order* create_order_from_input(string* str, const int NUM_CLIENTS,
-							   const int NUM_EQUITIES, int current_time);
-
-void make_matches(vector <Orderpq>* market, Order* order);
-
-void output_verbose();
-
-void output_median();
-
-void output_client_info();
-
-void output_time_travelers();
 
 int main(int argc, char *argv[]) {
 
@@ -58,7 +28,7 @@ int main(int argc, char *argv[]) {
 	vector <Orderpq> stock_market;
 
 	// include when beginning median data
-//	vector< vector <int> >* median_list;
+	vector< vector <int> >* median_list = new vector< vector<int> >;
 
 	MarketMode mode = NONE;
 	Verbose verbose = NO_VERBOSE;
@@ -115,7 +85,7 @@ int main(int argc, char *argv[]) {
 		arrival_rate = atoi(input_str.substr(14, input_str.length() - 14).c_str());
 
 		P2::PR_init(in_ss, seed, NUM_EQUITIES, NUM_CLIENTS, number_of_orders, arrival_rate);
-	}
+	} // if
 
 	istream& input_stream = (mode == TRADELIST) ? cin : in_ss;
 
@@ -127,21 +97,21 @@ int main(int argc, char *argv[]) {
 		if (current_timestamp != order_ptr->getTimestamp()) {
 			// add more for median in the future
 			if (median == YES_MEDIAN) {
-				output_median();
-			}
+				output_median(median_list);
+			} // if
 
 			current_timestamp = order_ptr->getTimestamp();
-		}
+		} // if
 
-		make_matches(&stock_market, order_ptr);
+		make_matches(&stock_market, median_list, order_ptr, verbose);
+	} // while
+
+	if (median_list) {
+		delete median_list; median_list = NULL;
 	}
 
-//	if (median_list) {
-//		delete median_list; median_list = NULL;
-//	}
-
 	return 0;
-}
+} // main
 
 void parse_command_line_input(int & argc, char *argv[], Verbose &verbose, Median &median,
 							  ClientInfo &client_info, TimeTravelers &time_travelers) {
@@ -176,9 +146,9 @@ void parse_command_line_input(int & argc, char *argv[], Verbose &verbose, Median
 
 			default:
 				break;
-		}
-	}
-}
+		} // switch
+	} // while
+} // parse_command_line_input
 
 Order* create_order_from_input(string* str, const int NUM_CLIENTS,
 							   const int NUM_EQUITIES, int current_time) {
@@ -216,11 +186,11 @@ Order* create_order_from_input(string* str, const int NUM_CLIENTS,
 				default:
 					t_stamp = stoi(str->substr(current_idx, i - current_idx));
 					break;
-			}
+			} // switch
 
 			current_idx = i + 1;
-		}
-	}
+		} // if
+	} // for
 
 	// Check that timestamp isn't bad
 	if (t_stamp < current_time) {
@@ -230,36 +200,88 @@ Order* create_order_from_input(string* str, const int NUM_CLIENTS,
 
 	return new Order(t_stamp, c_id, action, e_id, price, quant,
 					 NUM_CLIENTS, NUM_EQUITIES);
-}
+} // create_order_from_input
 
-void make_matches(vector <Orderpq>* market, Order* order) {
+void make_matches(vector <Orderpq>* market, vector< vector<int> >* median,
+				  Order* order, Verbose &verbose) {
+
 	Orderpq market_cpy = market->at(order->getEquityId());
 
-	
+	while ((order->getQuantity() != 0) || (!market_cpy.empty())) {
+
+		if (can_trade(order, market_cpy.top())) {
+
+			if (order->getTransaction() == Order::BUY) {
+
+				int equity_bought = (order->getQuantity() <= market_cpy.top()->getQuantity()) ? order->getQuantity() : market_cpy.top()->getQuantity();
+
+				order->changeQuantity(equity_bought);
+				market_cpy.top()->changeQuantity(equity_bought);
+
+				// add stuff for verbose
+//				if (verbose == YES_VERBOSE) {
+//					output_verbose();
+//				}
+
+			} // if order->getTransaction() == Order::BUY
+			else {
+				
+			} // else
+		} // if can_trade(order, market_cpy.top()
+
+		
+	}
 
 	return;
-}
+} // make_matches
+
+bool can_trade(Order* ord1, Order* ord2) {
+
+	if ((ord1->getQuantity() == 0) || (ord2->getQuantity() == 0)) {
+		return false;
+	}
+
+	if (ord1->getTransaction() != ord2->getTransaction()) {
+		if (ord1->getTransaction() == Order::BUY) {
+			if (ord1->getPrice() >= ord2->getPrice()) {
+				return true;
+			} // if
+
+			return false;
+		} // if
+		else {
+			if (ord1->getPrice() <= ord2->getPrice()) {
+				return true;
+			} // if
+
+			return false;
+		} // else
+	}
+	else {
+		return false;
+	}
+} // can_trade
 
 void output_verbose() {
 	
 
 	return;
-}
+} // output_verbose
 
-void output_median() {
+void output_median(vector< vector<int> >* median) {
 	
 
 	return;
-}
+} // output_median
 
 void output_client_info() {
 	
 
 	return;
-}
+} // output_client_info
 
 void output_time_travelers() {
 	
 
 	return;
-}
+} // output_time_travelers
