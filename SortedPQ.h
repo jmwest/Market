@@ -3,6 +3,8 @@
 
 #include "Eecs281PQ.h"
 
+#include <algorithm>
+
 //A specialized version of the 'priority_queue' ADT that is implemented with an
 //underlying sorted array-based container.
 //Note: The most extreme element should be found at the end of the
@@ -63,28 +65,40 @@ SortedPQ<TYPE, COMP_FUNCTOR>::SortedPQ(
   InputIterator end,
   COMP_FUNCTOR comp
 ) {
-  //Your code.
+
+	data = std::vector<TYPE>(start, end);
+	std::sort(data.begin(), data.end(), comp);
+	this->compare = comp;
 }
 
 template<typename TYPE, typename COMP_FUNCTOR>
 SortedPQ<TYPE, COMP_FUNCTOR>::SortedPQ(COMP_FUNCTOR comp) {
-  //Your code.
+
+	this->compare = comp;
 }
 
 template<typename TYPE, typename COMP_FUNCTOR>
 void SortedPQ<TYPE, COMP_FUNCTOR>::push(const TYPE& val) {
-  //Your code.
+
+	// maybe use lower_bound here instead. Only difference would be
+	// first in of equivalent TYPE would be first out
+	typename std::vector<TYPE>::iterator it = std::upper_bound(data.begin(), data.end(), val, this->compare);
+	data.insert(it, val);
+
+	return;
 }
 
 template<typename TYPE, typename COMP_FUNCTOR>
 void SortedPQ<TYPE, COMP_FUNCTOR>::pop() {
-  //Your code.
+
+	data.pop_back();
+	return;
 }
 
 template<typename TYPE, typename COMP_FUNCTOR>
 const TYPE& SortedPQ<TYPE, COMP_FUNCTOR>::top() const {
-  //Your code.
-  return TYPE(); //So that this sample implementation compiles.
+
+	return data.back(); //So that this sample implementation compiles.
 }
 
 #endif //SORTED_PQ_H

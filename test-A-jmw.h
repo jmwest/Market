@@ -14,7 +14,8 @@
 
 #include "Order.h"
 
-typedef priority_queue <Order*, vector <Order*>, OrderComparison> Orderpq;
+typedef priority_queue <Order*, vector <Order*>, BuyOrderComparison> Buypq;
+typedef priority_queue <Order*, vector <Order*>, SellOrderComparison> Sellpq;
 
 enum MarketMode {NONE, TRADELIST, PSEUDORANDOM};
 enum Verbose {NO_VERBOSE, YES_VERBOSE};
@@ -30,15 +31,15 @@ void parse_command_line_input(int & argc, char *argv[], Verbose &verbose, Median
 							  ClientInfo &client_info, TimeTravelers &time_travelers);
 
 Order* create_order_from_input(string* str, const int NUM_CLIENTS,
-							   const int NUM_EQUITIES, int current_time);
+							   const int NUM_EQUITIES, int current_time, int orders_processed);
 
-void make_matches(vector <Orderpq>* market, Order* order);
+void make_matches(vector <Sellpq>* s_market, vector <Buypq>* b_market, vector< vector<int> >* median, Order* order, Verbose &verbose);
 
 bool can_trade(Order* ord1, Order* ord2);
 
 void output_verbose();
 
-void output_median();
+void output_median(vector< vector<int> >* median);
 
 void output_client_info();
 

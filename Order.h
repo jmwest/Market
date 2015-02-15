@@ -19,15 +19,16 @@ public:
 
 	Order();
 	Order(int time_stamp_in, int client_in, Transaction transaction_in,
-		  int equity_in, int price_in, int quantity_in, int num_clients_in,
-		  int num_equities_in);
+		  int equity_in, int price_in, int quantity_in, int order_num_in,
+		  int num_clients_in, int num_equities_in);
 
-	int getTimestamp();
-	int getClientId();
-	Transaction getTransaction();
-	int getEquityId();
-	int getPrice();
-	int getQuantity();
+	int getTimestamp() const;
+	int getClientId() const;
+	Transaction getTransaction() const;
+	int getEquityId() const;
+	int getPrice() const;
+	int getQuantity() const;
+	int getOrderNumber() const;
 
 	void changeQuantity(int change_in_quantity);
 
@@ -39,9 +40,39 @@ private:
 	int price;
 	int quantity;
 
+	// used to sort equivalent orders
+	int order_num;
 };
 
-class OrderComparison {
+class BuyOrderComparison {
+public:
+	bool operator () (Order* ord1, Order* ord2) {
+		if (ord1->getPrice() < ord2->getPrice()) {
+			return true;
+		}
+		else if (ord1->getPrice() > ord2->getPrice()) {
+			return false;
+		}
+		else {
+			if (ord1->getTimestamp() > ord2->getTimestamp()) {
+				return true;
+			}
+			else if (ord1->getTimestamp() < ord2->getTimestamp()) {
+				return false;
+			}
+			else {
+				if (ord1->getOrderNumber() > ord2->getOrderNumber()) {
+					return true;
+				}
+				else {
+					return false;
+				}
+			}
+		}
+	}
+};
+
+class SellOrderComparison {
 public:
 	bool operator () (Order* ord1, Order* ord2) {
 		if (ord1->getPrice() > ord2->getPrice()) {
@@ -54,8 +85,16 @@ public:
 			if (ord1->getTimestamp() > ord2->getTimestamp()) {
 				return true;
 			}
-			else {
+			else if (ord1->getTimestamp() < ord2->getTimestamp()) {
 				return false;
+			}
+			else {
+				if (ord1->getOrderNumber() > ord2->getOrderNumber()) {
+					return true;
+				}
+				else {
+					return false;
+				}
 			}
 		}
 	}
@@ -66,11 +105,11 @@ Order::Order()
 equity_id(0), price(0), quantity(0) {}
 
 Order::Order(int time_stamp_in, int client_in, Transaction transaction_in,
-			 int equity_in, int price_in, int quantity_in, int num_clients_in,
-			 int num_equities_in)
+			 int equity_in, int price_in, int quantity_in, int order_num_in,
+			 int num_clients_in, int num_equities_in)
 
 : timestamp(time_stamp_in), client_id(client_in), transaction(transaction_in),
-equity_id(equity_in), price(price_in), quantity(quantity_in) {
+equity_id(equity_in), price(price_in), quantity(quantity_in), order_num(order_num_in) {
 
 	if (time_stamp_in < 0) {
 		cerr << "\nTimestamp for an order was less than zero: exit(1)" << endl;
@@ -92,28 +131,32 @@ equity_id(equity_in), price(price_in), quantity(quantity_in) {
 	}
 }
 
-int Order::getTimestamp() {
+int Order::getTimestamp() const {
 	return timestamp;
 }
 
-int Order::getClientId() {
+int Order::getClientId() const {
 	return client_id;
 }
 
-Order::Transaction Order::getTransaction() {
+Order::Transaction Order::getTransaction() const {
 	return transaction;
 }
 
-int Order::getEquityId() {
+int Order::getEquityId() const {
 	return equity_id;
 }
 
-int Order::getPrice() {
+int Order::getPrice() const {
 	return price;
 }
 
-int Order::getQuantity() {
+int Order::getQuantity() const {
 	return quantity;
+}
+
+int Order::getOrderNumber() const {
+	return order_num;
 }
 
 void Order::changeQuantity(int change_in_quantity) {
