@@ -98,7 +98,7 @@ void SortedPQ<TYPE, COMP_FUNCTOR>::pop() {
 template<typename TYPE, typename COMP_FUNCTOR>
 const TYPE& SortedPQ<TYPE, COMP_FUNCTOR>::top() const {
 
-	return data.back(); //So that this sample implementation compiles.
+	return data.back();
 }
 
 #endif //SORTED_PQ_H

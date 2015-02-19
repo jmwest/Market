@@ -230,9 +230,9 @@ void make_matches(vector <Sellpq>* s_market, vector <Buypq>* b_market,
 					market_cpy.top()->changeQuantity(equity_bought);
 
 					// add stuff for verbose
-	//				if (verbose == YES_VERBOSE) {
+					if (verbose == YES_VERBOSE) {
 	//					output_verbose();
-	//				}
+					}
 
 				} // if can_trade(order, market_cpy.top()
 

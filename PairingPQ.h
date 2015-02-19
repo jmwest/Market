@@ -54,7 +54,7 @@ public:
 
   //Description: Return true if the priority_queue is empty.
   //Runtime: O(1)
-  virtual bool empty() const { /*** Fill this in ***/ }
+  virtual bool empty() const { return !root; }
   class Node {
   public:
 	Node(const TYPE & val)

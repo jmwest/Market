@@ -5,23 +5,24 @@
 #include "Eecs281PQ.h"
 #include "SortedPQ.h"
 #include "BinaryPQ.h"
-#include "PairingPQ.h"
+//#include "PairingPQ.h"
 #include <vector>
 #include <assert.h>
 using std::vector;
 
 void testSorted(vector<int>&);
 void testBinary(vector<int>&);
-void testPairing(vector<int>&);
+//void testPairing(vector<int>&);
 
-int main(int argc, char * argv[])
+//int main(int argc, char * argv[])
+int main()
 {
 	vector<int> vec;
 	vec.push_back(0);
 	vec.push_back(1);
 	testSorted(vec);
 	testBinary(vec);
-	testPairing(vec);
+//	testPairing(vec);
 }
 
 void testSorted(vector<int> & vec)
@@ -46,18 +47,18 @@ void testBinary(vector<int> & vec)
 	delete pq1;
 }
 
-void testPairing(vector<int> & vec)
-{
-	Eecs281PQ<int> * pq1 = new PairingPQ<int>(vec.begin(), vec.end());
-	Eecs281PQ<int> * pq2 = new PairingPQ<int>(*((PairingPQ<int> *)pq1));
-	Eecs281PQ<int> * pq3 = new PairingPQ<int>();
-	pq3 = pq2;
-	pq1->push(3);
-	pq2->pop();
-	pq1->size();
-	pq1->empty();
-	assert(pq1->top() == 3);
-	delete pq1;
-	delete pq2;
-	delete pq3;
-}
+//void testPairing(vector<int> & vec)
+//{
+//	Eecs281PQ<int> * pq1 = new PairingPQ<int>(vec.begin(), vec.end());
+//	Eecs281PQ<int> * pq2 = new PairingPQ<int>(*((PairingPQ<int> *)pq1));
+//	Eecs281PQ<int> * pq3 = new PairingPQ<int>();
+//	pq3 = pq2;
+//	pq1->push(3);
+//	pq2->pop();
+//	pq1->size();
+//	pq1->empty();
+//	assert(pq1->top() == 3);
+//	delete pq1;
+//	delete pq2;
+//	delete pq3;
+//}
