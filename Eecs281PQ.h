@@ -7,7 +7,7 @@
 
 //A simple interface that implements a generic priority_queue.
 //Runtime specifications assume constant time comparison and copying.
-template<typename TYPE, typename COMP_FUNCTOR = std::less<TYPE>>
+template<typename TYPE, typename COMP_FUNCTOR = std::less<TYPE> >
 class Eecs281PQ {
 public:
   typedef unsigned size_type;

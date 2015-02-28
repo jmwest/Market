@@ -39,7 +39,7 @@ bool can_trade(Order* ord1, Order* ord2);
 
 void output_verbose();
 
-void output_median(vector< vector<int> >* median);
+void output_median();
 
 void output_client_info();
 

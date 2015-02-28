@@ -4,7 +4,7 @@
 #include "Eecs281PQ.h"
 
 //A specialized version of the 'priority_queue' ADT implemented as a binary priority_queue.
-template<typename TYPE, typename COMP_FUNCTOR = std::less<TYPE>>
+template<typename TYPE, typename COMP_FUNCTOR = std::less<TYPE> >
 class BinaryPQ : public Eecs281PQ<TYPE, COMP_FUNCTOR> {
 public:
   typedef unsigned size_type;
@@ -39,12 +39,13 @@ public:
   //Description: Get the number of elements in the priority_queue.
   //Runtime: O(1)
   virtual size_type size() const
-    { /*** Fill this in - might be very simple depending on implementation ***/ }
+	{ return data.size() - 1; }
 
   //Description: Return true if the priority_queue is empty.
   //Runtime: O(1)
   virtual bool empty() const
-    { /*** Fill this in - might be very simple depending on implementation ***/ }
+	{ return !(data.size() - 1); }
+
 private:
   //Note: This vector *must* be used your priority_queue implementation.
   std::vector<TYPE> data;
@@ -73,6 +74,8 @@ BinaryPQ<TYPE, COMP_FUNCTOR>::BinaryPQ(
 
 template<typename TYPE, typename COMP_FUNCTOR>
 BinaryPQ<TYPE, COMP_FUNCTOR>::BinaryPQ(COMP_FUNCTOR comp) {
+	data.push_back(TYPE());
+
 	this->compare = comp;
 }
 
@@ -80,7 +83,7 @@ template<typename TYPE, typename COMP_FUNCTOR>
 void BinaryPQ<TYPE, COMP_FUNCTOR>::push(const TYPE& val) {
 	data.push_back(val);
 
-	fixUp(data.size());
+	fixUp(data.size() - 1);
 }
 
 template<typename TYPE, typename COMP_FUNCTOR>
@@ -88,7 +91,9 @@ void BinaryPQ<TYPE, COMP_FUNCTOR>::pop() {
 	data.at(1) = data.back();
 	data.pop_back();
 
-	fixDown(1);
+	if (data.size() > 2) {
+		fixDown(1);
+	}
 }
 
 template<typename TYPE, typename COMP_FUNCTOR>
@@ -100,7 +105,7 @@ const TYPE& BinaryPQ<TYPE, COMP_FUNCTOR>::top() const {
 template<typename TYPE, typename COMP_FUNCTOR>
 void BinaryPQ<TYPE,COMP_FUNCTOR>::fixUp(int pos) {
 	for (int i = pos; i > 1; i /= 2) {
-		if (data.at(i) > data.at(i/2)) {
+		if (this->compare(data.at(i/2), data.at(i))) {
 			TYPE temp = data.at(i);
 			data.at(i) = data.at(i/2);
 			data.at(i/2) = temp;
@@ -113,20 +118,23 @@ void BinaryPQ<TYPE,COMP_FUNCTOR>::fixUp(int pos) {
 
 template<typename TYPE, typename COMP_FUNCTOR>
 void BinaryPQ<TYPE,COMP_FUNCTOR>::fixDown(int pos) {
-	for (int i = pos; i < data.size() / 2;) {
-		if (data.size() == (i * 2) + 1) {
-			if (data.at(i) < data.at(i * 2)) {
+
+	for (int i = pos; i <= (int(data.size()) - 1) / 2;) {
+
+		if (int(data.size()) - 1 == i * 2) {
+			if (this->compare(data.at(i),data.at(i * 2))) {
 				TYPE temp = data.at(i);
 				data.at(i) = data.at(i * 2);
 				data.at(i * 2) = temp;
 
 				i *= 2;
 			}
+			else { break; }
 		}
 		else {
-			int bigger_child = (data.at(i * 2) > data.at((i * 2) + 1)) ? i * 2 : (i * 2) + 1;
+			int bigger_child = this->compare(data.at((i * 2) + 1), data.at(i * 2)) ? i * 2 : (i * 2) + 1;
 
-			if (data.at(i) < data.at(bigger_child)) {
+			if (this->compare(data.at(i), data.at(bigger_child))) {
 				TYPE temp = data.at(i);
 				data.at(i) = data.at(bigger_child);
 				data.at(bigger_child) = temp;

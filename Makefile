@@ -129,7 +129,7 @@ clean:
 PARTIAL_SUBMITFILES=$(filter-out $(TESTSOURCES), $(wildcard Makefile *.h *.cpp))
 $(PARTIAL_SUBMITFILE): $(PARTIAL_SUBMITFILES)
 	rm -f $(PARTIAL_SUBMITFILE) $(FULL_SUBMITFILE)
-	dos2unix $(PARTIAL_SUBMITFILES)
+	#dos2unix $(PARTIAL_SUBMITFILES)
 	tar -vczf $(PARTIAL_SUBMITFILE) $(PARTIAL_SUBMITFILES)
 	@echo !!! WARNING: No test cases included. Use 'make fullsubmit' to include test cases. !!!
 

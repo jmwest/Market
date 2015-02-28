@@ -102,7 +102,7 @@ int main(int argc, char *argv[]) {
 		if (current_timestamp != order_ptr->getTimestamp()) {
 			// add more for median in the future
 			if (median == YES_MEDIAN) {
-				output_median(median_list);
+				output_median();
 			} // if
 
 			current_timestamp = order_ptr->getTimestamp();
@@ -234,6 +234,10 @@ void make_matches(vector <Sellpq>* s_market, vector <Buypq>* b_market,
 	//					output_verbose();
 					}
 
+					// so that it compiles
+					median->at(order->getEquityId()).push_back(order->getPrice());
+					//
+
 				} // if can_trade(order, market_cpy.top()
 
 				
@@ -314,8 +318,7 @@ void output_verbose() {
 	return;
 } // output_verbose
 
-void output_median(vector< vector<int> >* median) {
-	
+void output_median() {
 
 	return;
 } // output_median

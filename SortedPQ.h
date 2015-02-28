@@ -10,7 +10,7 @@
 //Note: The most extreme element should be found at the end of the
 //'data' container, such that traversing the iterators yields the elements in
 //sorted order.
-template<typename TYPE, typename COMP_FUNCTOR = std::less<TYPE>>
+template<typename TYPE, typename COMP_FUNCTOR = std::less<TYPE> >
 class SortedPQ : public Eecs281PQ<TYPE, COMP_FUNCTOR> {
 public:
   typedef unsigned size_type;
