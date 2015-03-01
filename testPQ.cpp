@@ -112,23 +112,45 @@ void testPairing(vector<int> vec)
 	cerr << "Pairing\n";
 
 	Eecs281PQ<int> * pq1 = new PairingPQ<int>(vec.begin(), vec.end());
+	PairingPQ<int> * pq1b = new PairingPQ<int>(vec.begin(), vec.end());
+
+	pq1b->print();
 
 	cerr << "Iterated" << endl;
 
 	Eecs281PQ<int> * pq2 = new PairingPQ<int>(*((PairingPQ<int> *)pq1));
 
+	assert(pq2->top() == pq1->top());
+
 	cerr << "CC'ed" << endl;
 
 	Eecs281PQ<int> * pq3 = new PairingPQ<int>();
+	PairingPQ<int> * pq4 = new PairingPQ<int>(*((PairingPQ<int> *)pq1));
 
 	cerr << "constructed" << endl;
 
-	pq3 = pq2;
+	cerr << "1b size: " << pq1b->size() << endl;
+	cerr << "4 size: " << pq4->size() << endl;
+
+	*pq1b = *pq4;
+	cerr << "assigned" << endl;
+	cerr << "1b: " << pq1b->size() << endl;
+	cerr << "4: " << pq4->size() << endl;
+
+	assert(pq1b->top() == pq4->top());
+	cerr <<"top"<<endl;
+	pq1b->pop(); pq4->pop();
+	cerr << "Pop"<<endl;
+	assert(pq1b->top() == pq4->top());
+
+	cerr <<"blah" << endl;
 	pq1->push(3);
 	pq2->pop();
-	pq1->size();
-	pq1->empty();
+	assert(pq1->size() == 3);
+	assert(!pq1->empty());
 	assert(pq1->top() == 3);
+
+	cerr << "deletes" << endl;
 
 	delete pq1;
 	delete pq2;

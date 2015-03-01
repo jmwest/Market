@@ -39,12 +39,12 @@ public:
   //Description: Get the number of elements in the priority_queue.
   //Runtime: O(1)
   virtual size_type size() const
-	{ return data.size() - 1; }
+	{ return int(data.size()) - 1; }
 
   //Description: Return true if the priority_queue is empty.
   //Runtime: O(1)
   virtual bool empty() const
-	{ return !(data.size() - 1); }
+	{ return !(int(data.size()) - 1); }
 
 private:
   //Note: This vector *must* be used your priority_queue implementation.
@@ -65,7 +65,7 @@ BinaryPQ<TYPE, COMP_FUNCTOR>::BinaryPQ(
 	data.push_back(TYPE());
 	data.insert(data.end(), start, end);
 
-	for (int i = data.size()/2; i > 0; --i) {
+	for (int i = int(data.size() / 2); i > 0; --i) {
 		fixDown(i);
 	}
 
@@ -83,7 +83,7 @@ template<typename TYPE, typename COMP_FUNCTOR>
 void BinaryPQ<TYPE, COMP_FUNCTOR>::push(const TYPE& val) {
 	data.push_back(val);
 
-	fixUp(data.size() - 1);
+	fixUp(int(data.size()) - 1);
 }
 
 template<typename TYPE, typename COMP_FUNCTOR>
@@ -91,7 +91,7 @@ void BinaryPQ<TYPE, COMP_FUNCTOR>::pop() {
 	data.at(1) = data.back();
 	data.pop_back();
 
-	if (data.size() > 2) {
+	if (int(data.size()) > 2) {
 		fixDown(1);
 	}
 }

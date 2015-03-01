@@ -45,7 +45,7 @@ public:
   //Description: Get the number of elements in the priority_queue. This has been
   //             implemented for you.
   //Runtime: O(1)
-  virtual size_type size() const { return data.size(); }
+  virtual size_type size() const { return int(data.size()); }
 
   //Description: Return true if the priority_queue is empty. This has been implemented
   //             for you.

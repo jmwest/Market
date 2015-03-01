@@ -3,10 +3,6 @@
 
 #include "Eecs281PQ.h"
 
-/// Remove later //////
-#include <iostream> ///
-///////////////////////
-
 //A specialized version of the 'priority_queue' ADT implemented as a pairing priority_queue.
 template<typename TYPE, typename COMP_FUNCTOR = std::less<TYPE> >
 class PairingPQ : public Eecs281PQ<TYPE, COMP_FUNCTOR> {
@@ -105,8 +101,12 @@ PairingPQ<TYPE, COMP_FUNCTOR>::PairingPQ(
   COMP_FUNCTOR comp
 ) {
 
+	q_size = 0;
+	root = nullptr;
+
 	while (start != end) {
-		push(*(start++));
+		push(*start);
+		++start;
 	}
 
 	this->compare = comp;
@@ -115,24 +115,28 @@ PairingPQ<TYPE, COMP_FUNCTOR>::PairingPQ(
 template<typename TYPE, typename COMP_FUNCTOR>
 PairingPQ<TYPE, COMP_FUNCTOR>::PairingPQ(COMP_FUNCTOR comp) {
 
+	q_size = 0;
+	root = nullptr;
 	this->compare = comp;
 }
 
 template<typename TYPE, typename COMP_FUNCTOR>
 PairingPQ<TYPE, COMP_FUNCTOR>::PairingPQ(const PairingPQ& other) {
 
+	q_size = 0;
+	root = nullptr;
 	this->compare = other.compare;
 
 	if (other.root) {
+		q_size = other.q_size;
 		root = build_tree(other.root);
 	}
 }
 
 template<typename TYPE, typename COMP_FUNCTOR>
-PairingPQ<TYPE, COMP_FUNCTOR>&
-PairingPQ<TYPE, COMP_FUNCTOR>::operator=(const PairingPQ& rhs) {
+PairingPQ<TYPE, COMP_FUNCTOR>& PairingPQ<TYPE, COMP_FUNCTOR>::operator= (const PairingPQ & rhs) {
 
-	if (this != rhs) {
+	if (this != &rhs) {
 		// delete current pq so as not to leak memory
 		while (q_size != 0) {
 			pop();
@@ -140,6 +144,7 @@ PairingPQ<TYPE, COMP_FUNCTOR>::operator=(const PairingPQ& rhs) {
 
 		// create new tree
 		if (rhs.root) {
+			q_size = rhs.q_size;
 			root = build_tree(rhs.root);
 		}
 	}
@@ -155,51 +160,55 @@ PairingPQ<TYPE, COMP_FUNCTOR>::~PairingPQ() {
 	}
 }
 
-
 template<typename TYPE, typename COMP_FUNCTOR>
 void PairingPQ<TYPE, COMP_FUNCTOR>::pop() {
 
-	Node* first = root->child;
-	Node* current = first;
-	Node* next = current;
+	if (root) {
+		Node* first = root->child;
+		Node* current = first;
+		Node* next = current->sibling;
 
-	std::vector <Node*> kids;
+		std::vector <Node*> kids;
 
-	delete root; root = nullptr;
+		delete root; root = nullptr;
 
-	// first pass
-	for (int i = 0; current; ++i) {
+		// first pass
+		for (int i = 0; current; ++i) {
 
-		if (current->sibling) {
-			next = current->sibling->sibling;
-			kids.at(i) = meld(current, current->sibling);
+			if (current->sibling) {
+				next = current->sibling->sibling;
+				kids.push_back(meld(current, current->sibling));
+				current = next;
+			}
+			else {
+				kids.push_back(current);
+				current = current->sibling;
+			}
+
 		}
-		else {
-			kids.at(i) = current;
-		}
 
-		current = next;
-	}
-
-	//second pass
-	if (kids.size() >= 2) {
-		current = meld(kids.back(), kids.at(kids.size() - 2));
-		kids.pop_back();
-		kids.pop_back();
-
-		while (kids.size() != 0) {
-			current = meld(kids.back(), current);
+		//second pass
+		if (kids.size() >= 2) {
+			current = meld(kids.back(), kids.at(kids.size() - 2));
 			kids.pop_back();
+			kids.pop_back();
+
+			while (kids.size() != 0) {
+				current = meld(kids.back(), current);
+				kids.pop_back();
+			}
+
+			root = current;
 		}
+		else if (kids.size() == 1) {
+			root = kids.back();
+		}
+		else { root = nullptr; }
 
-		root = current;
+		--q_size;
 	}
-	else if (kids.size() == 1) {
-		root = kids.back();
-	}
-	else { root = nullptr; }
 
-	--q_size;
+	return;
 }
 
 template<typename TYPE, typename COMP_FUNCTOR>
@@ -210,10 +219,15 @@ const TYPE& PairingPQ<TYPE, COMP_FUNCTOR>::top() const {
 
 template<typename TYPE, typename COMP_FUNCTOR>
 void PairingPQ<TYPE, COMP_FUNCTOR>::push(const TYPE& val) {
-	std::cerr << "push" << std::endl;
-	Node* temp1 = new Node(val);
 
-	root = meld(temp1, root);
+	Node* temp = new Node(val);
+
+	if (root) {
+		root = meld(temp, root);
+	}
+	else {
+		root = temp;
+	}
 
 	++q_size;
 }
@@ -243,7 +257,7 @@ template<typename TYPE, typename COMP_FUNCTOR>
 typename PairingPQ<TYPE, COMP_FUNCTOR>::Node* PairingPQ<TYPE, COMP_FUNCTOR>::build_tree(Node* other) {
 
 	Node* mytree = new Node(other->elt);
-	std::cerr << "Recurse, recurse!" << std::endl;
+
 	if (other->sibling) {
 		mytree->sibling = build_tree(other->sibling);
 	}
@@ -254,7 +268,6 @@ typename PairingPQ<TYPE, COMP_FUNCTOR>::Node* PairingPQ<TYPE, COMP_FUNCTOR>::bui
 
 	return mytree;
 }
-
 
 #endif //PAIRING_PQ_H
 
