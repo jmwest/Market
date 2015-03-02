@@ -114,8 +114,6 @@ void testPairing(vector<int> vec)
 	Eecs281PQ<int> * pq1 = new PairingPQ<int>(vec.begin(), vec.end());
 	PairingPQ<int> * pq1b = new PairingPQ<int>(vec.begin(), vec.end());
 
-	pq1b->print();
-
 	cerr << "Iterated" << endl;
 
 	Eecs281PQ<int> * pq2 = new PairingPQ<int>(*((PairingPQ<int> *)pq1));
@@ -153,8 +151,10 @@ void testPairing(vector<int> vec)
 	cerr << "deletes" << endl;
 
 	delete pq1;
+	delete pq1b;
 	delete pq2;
 	delete pq3;
+	delete pq4;
 }
 
 

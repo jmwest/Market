@@ -11,6 +11,9 @@
 
 #include <iostream>
 
+#include "Client.h"
+#include "Equity.h"
+
 using namespace std;
 
 class Order {
@@ -18,25 +21,25 @@ public:
 	enum Transaction {NONE, BUY, SELL};
 
 	Order();
-	Order(int time_stamp_in, int client_in, Transaction transaction_in,
-		  int equity_in, int price_in, int quantity_in, int order_num_in,
+	Order(int time_stamp_in, Client* client_in, Transaction transaction_in,
+		  Equity* equity_in, int price_in, int quantity_in, int order_num_in,
 		  int num_clients_in, int num_equities_in);
 
-	int getTimestamp() const;
-	int getClientId() const;
-	Transaction getTransaction() const;
-	int getEquityId() const;
-	int getPrice() const;
-	int getQuantity() const;
-	int getOrderNumber() const;
+	int get_timestamp() const;
+	Client* get_client() const;
+	Transaction get_transaction() const;
+	Equity* get_equity() const;
+	int get_price() const;
+	int get_quantity() const;
+	int get_order_number() const;
 
-	void changeQuantity(int change_in_quantity);
+	void change_quantity(int change_in_quantity);
 
 private:
 	int timestamp;
-	int client_id;
+	Client* client;
 	Transaction transaction;
-	int equity_id;
+	Equity* equity;
 	int price;
 	int quantity;
 
@@ -47,21 +50,21 @@ private:
 class BuyOrderComparison {
 public:
 	bool operator () (Order* ord1, Order* ord2) {
-		if (ord1->getPrice() < ord2->getPrice()) {
+		if (ord1->get_price() < ord2->get_price()) {
 			return true;
 		}
-		else if (ord1->getPrice() > ord2->getPrice()) {
+		else if (ord1->get_price() > ord2->get_price()) {
 			return false;
 		}
 		else {
-			if (ord1->getTimestamp() > ord2->getTimestamp()) {
+			if (ord1->get_timestamp() > ord2->get_timestamp()) {
 				return true;
 			}
-			else if (ord1->getTimestamp() < ord2->getTimestamp()) {
+			else if (ord1->get_timestamp() < ord2->get_timestamp()) {
 				return false;
 			}
 			else {
-				if (ord1->getOrderNumber() > ord2->getOrderNumber()) {
+				if (ord1->get_order_number() > ord2->get_order_number()) {
 					return true;
 				}
 				else {
@@ -75,21 +78,21 @@ public:
 class SellOrderComparison {
 public:
 	bool operator () (Order* ord1, Order* ord2) {
-		if (ord1->getPrice() > ord2->getPrice()) {
+		if (ord1->get_price() > ord2->get_price()) {
 			return true;
 		}
-		else if (ord1->getPrice() < ord2->getPrice()) {
+		else if (ord1->get_price() < ord2->get_price()) {
 			return false;
 		}
 		else {
-			if (ord1->getTimestamp() > ord2->getTimestamp()) {
+			if (ord1->get_timestamp() > ord2->get_timestamp()) {
 				return true;
 			}
-			else if (ord1->getTimestamp() < ord2->getTimestamp()) {
+			else if (ord1->get_timestamp() < ord2->get_timestamp()) {
 				return false;
 			}
 			else {
-				if (ord1->getOrderNumber() > ord2->getOrderNumber()) {
+				if (ord1->get_order_number() > ord2->get_order_number()) {
 					return true;
 				}
 				else {
@@ -101,25 +104,24 @@ public:
 };
 
 Order::Order()
-: timestamp(0), client_id(0), transaction(NONE),
-equity_id(0), price(0), quantity(0) {}
+: timestamp(0), transaction(NONE), price(0), quantity(0) {}
 
-Order::Order(int time_stamp_in, int client_in, Transaction transaction_in,
-			 int equity_in, int price_in, int quantity_in, int order_num_in,
+Order::Order(int time_stamp_in, Client* client_in, Transaction transaction_in,
+			 Equity* equity_in, int price_in, int quantity_in, int order_num_in,
 			 int num_clients_in, int num_equities_in)
 
-: timestamp(time_stamp_in), client_id(client_in), transaction(transaction_in),
-equity_id(equity_in), price(price_in), quantity(quantity_in), order_num(order_num_in) {
+: timestamp(time_stamp_in), client(client_in), transaction(transaction_in),
+equity(equity_in), price(price_in), quantity(quantity_in), order_num(order_num_in) {
 
 	if (time_stamp_in < 0) {
 		cerr << "\nTimestamp for an order was less than zero: exit(1)" << endl;
 		exit(1);
 	}
-	if ((client_in < 0) || (client_in >= num_clients_in)) {
+	if ((client_in->get_client_id() < 0) || (client_in->get_client_id() >= num_clients_in)) {
 		cerr << "\nClient_id for an order was out of range: exit(1)" << endl;
 		exit(1);
 	}
-	if ((equity_in < 0) || (equity_in >= num_equities_in)) {
+	if ((equity_in->get_equity_id() < 0) || (equity_in->get_equity_id() >= num_equities_in)) {
 		cerr << "\nEquity_id for an order was out of range: exit(1)" << endl;
 		exit(1);
 	}
@@ -131,35 +133,35 @@ equity_id(equity_in), price(price_in), quantity(quantity_in), order_num(order_nu
 	}
 }
 
-int Order::getTimestamp() const {
+int Order::get_timestamp() const {
 	return timestamp;
 }
 
-int Order::getClientId() const {
-	return client_id;
+Client* Order::get_client() const {
+	return client;
 }
 
-Order::Transaction Order::getTransaction() const {
+Order::Transaction Order::get_transaction() const {
 	return transaction;
 }
 
-int Order::getEquityId() const {
-	return equity_id;
+Equity* Order::get_equity() const {
+	return equity;
 }
 
-int Order::getPrice() const {
+int Order::get_price() const {
 	return price;
 }
 
-int Order::getQuantity() const {
+int Order::get_quantity() const {
 	return quantity;
 }
 
-int Order::getOrderNumber() const {
+int Order::get_order_number() const {
 	return order_num;
 }
 
-void Order::changeQuantity(int change_in_quantity) {
+void Order::change_quantity(int change_in_quantity) {
 	quantity = quantity - change_in_quantity;
 
 	return;

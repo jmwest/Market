@@ -11,8 +11,11 @@
 
 #include <stdio.h>
 #include <queue>
+#include <sstream>
 
 #include "Order.h"
+#include "Client.h"
+#include "Equity.h"
 
 typedef priority_queue <Order*, vector <Order*>, BuyOrderComparison> Buypq;
 typedef priority_queue <Order*, vector <Order*>, SellOrderComparison> Sellpq;
@@ -30,19 +33,24 @@ enum TimeTravelers {NO_TIME_TRAVELERS, YES_TIME_TRAVELERS};
 void parse_command_line_input(int & argc, char *argv[], Verbose &verbose, Median &median,
 							  ClientInfo &client_info, TimeTravelers &time_travelers);
 
-Order* create_order_from_input(string* str, const int NUM_CLIENTS,
-							   const int NUM_EQUITIES, int current_time, int orders_processed);
+Order* create_order_from_input(string* str, vector <Client> * clients, vector <Equity> * equities,
+							   int current_time, int orders_processed);
 
-void make_matches(vector <Sellpq>* s_market, vector <Buypq>* b_market, vector< vector<int> >* median, Order* order, Verbose &verbose);
+void make_matches(vector <Sellpq>* s_market, vector <Buypq>* b_market, Order* order,
+				  vector <Client>* clients, Verbose &verbose, int &orders_processed,
+				  ostringstream* ss);
 
 bool can_trade(Order* ord1, Order* ord2);
 
-void output_verbose();
+void output_verbose(int buying_client, int selling_client, int equity, int num_shares,
+					int price, ostringstream* ss);
 
-void output_median();
+void output_median(vector <Equity>* equities, int timestamp, ostringstream* ss);
 
-void output_client_info();
+void output_summary(int orders_processed, ostringstream* ss);
 
-void output_time_travelers();
+void output_client_info(vector <Client>* clients, ostringstream* ss);
+
+void output_time_travelers(ostringstream* ss);
 
 #endif /* defined(__EECS_281_Project_2__market__) */

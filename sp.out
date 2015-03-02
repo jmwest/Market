@@ -1,0 +1,61 @@
+Processing orders...
+Client 1 purchased 27 shares of Equity 2 from Client 1 for $9/share
+Median match price of Equity 2 at time 5 is $9
+Median match price of Equity 2 at time 6 is $9
+Median match price of Equity 2 at time 7 is $9
+Client 0 purchased 13 shares of Equity 1 from Client 0 for $72/share
+Median match price of Equity 1 at time 8 is $72
+Median match price of Equity 2 at time 8 is $9
+Median match price of Equity 1 at time 9 is $72
+Median match price of Equity 2 at time 9 is $9
+Client 0 purchased 39 shares of Equity 0 from Client 0 for $24/share
+Median match price of Equity 0 at time 10 is $24
+Median match price of Equity 1 at time 10 is $72
+Median match price of Equity 2 at time 10 is $9
+Median match price of Equity 0 at time 11 is $24
+Median match price of Equity 1 at time 11 is $72
+Median match price of Equity 2 at time 11 is $9
+Client 1 purchased 1 shares of Equity 0 from Client 0 for $24/share
+Median match price of Equity 0 at time 12 is $24
+Median match price of Equity 1 at time 12 is $72
+Median match price of Equity 2 at time 12 is $9
+Client 1 purchased 18 shares of Equity 2 from Client 0 for $2/share
+Median match price of Equity 0 at time 13 is $24
+Median match price of Equity 1 at time 13 is $72
+Median match price of Equity 2 at time 13 is $5
+Client 0 purchased 7 shares of Equity 2 from Client 0 for $2/share
+Client 0 purchased 11 shares of Equity 2 from Client 1 for $5/share
+Median match price of Equity 0 at time 14 is $24
+Median match price of Equity 1 at time 14 is $72
+Median match price of Equity 2 at time 14 is $3
+Client 0 purchased 28 shares of Equity 1 from Client 0 for $72/share
+Client 1 purchased 15 shares of Equity 1 from Client 0 for $66/share
+Median match price of Equity 0 at time 15 is $24
+Median match price of Equity 1 at time 15 is $72
+Median match price of Equity 2 at time 15 is $3
+Median match price of Equity 0 at time 16 is $24
+Median match price of Equity 1 at time 16 is $72
+Median match price of Equity 2 at time 16 is $3
+Median match price of Equity 0 at time 17 is $24
+Median match price of Equity 1 at time 17 is $72
+Median match price of Equity 2 at time 17 is $3
+Median match price of Equity 0 at time 18 is $24
+Median match price of Equity 1 at time 18 is $72
+Median match price of Equity 2 at time 18 is $3
+Client 0 purchased 22 shares of Equity 2 from Client 0 for $58/share
+Client 0 purchased 7 shares of Equity 2 from Client 1 for $86/share
+Median match price of Equity 0 at time 19 is $24
+Median match price of Equity 1 at time 19 is $72
+Median match price of Equity 2 at time 19 is $7
+Median match price of Equity 0 at time 20 is $24
+Median match price of Equity 1 at time 20 is $72
+Median match price of Equity 2 at time 20 is $7
+---End of Day---
+Orders Processed: 11
+---Client Info---
+Client 0 bought 127 and sold 143 for a net transfer of $393
+Client 1 bought 61 and sold 45 for a net transfer of $-393
+---Time Travelers---
+A time traveler would buy shares of Equity 0 at time: 4 and sell these shares at time: 17
+A time traveler would buy shares of Equity 1 at time: 15 and sell these shares at time: 20
+A time traveler would buy shares of Equity 2 at time: 9 and sell these shares at time: 19

@@ -42,6 +42,14 @@
 		27BA1B931A8A77E600A08A58 /* test-A-jmw.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "test-A-jmw.h"; sourceTree = SOURCE_ROOT; };
 		27C824641A87E58B00604C71 /* test-TL-input.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "test-TL-input.txt"; sourceTree = SOURCE_ROOT; };
 		27C824651A87E65600604C71 /* test-PR-input.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "test-PR-input.txt"; sourceTree = SOURCE_ROOT; };
+		27E2A4621AA3B23A00942F98 /* Client.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Client.h; sourceTree = SOURCE_ROOT; };
+		27E2A4631AA3B24500942F98 /* Equity.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Equity.h; sourceTree = SOURCE_ROOT; };
+		27E2A4641AA5064300942F98 /* sp.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = sp.txt; sourceTree = SOURCE_ROOT; };
+		27E2A4651AA5069400942F98 /* st.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = st.txt; sourceTree = SOURCE_ROOT; };
+		27E2A4661AA506AB00942F98 /* sp.out */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = sp.out; sourceTree = SOURCE_ROOT; };
+		27E2A4681AA5070B00942F98 /* st-mvc.out */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "st-mvc.out"; sourceTree = SOURCE_ROOT; };
+		27E2A4691AA5070B00942F98 /* st-mvct.out */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "st-mvct.out"; sourceTree = SOURCE_ROOT; };
+		27E2A46A1AA50AF900942F98 /* st-out.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "st-out.txt"; sourceTree = SOURCE_ROOT; };
 		27F74DD71A8FEFF90002B847 /* P2.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = P2.cpp; sourceTree = SOURCE_ROOT; };
 		27F9D9EC1A86BA0400FBE7A0 /* EECS 281 Project 2 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "EECS 281 Project 2"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -77,8 +85,8 @@
 				272D140D1A87098F006DFDB6 /* market.h */,
 				272D140C1A87098F006DFDB6 /* market.cpp */,
 				272D140F1A870DF9006DFDB6 /* Order.h */,
-				27C824641A87E58B00604C71 /* test-TL-input.txt */,
-				27C824651A87E65600604C71 /* test-PR-input.txt */,
+				27E2A4621AA3B23A00942F98 /* Client.h */,
+				27E2A4631AA3B24500942F98 /* Equity.h */,
 				27BA1B8F1A8A779400A08A58 /* Test A */,
 			);
 			name = "Part A";
@@ -89,6 +97,14 @@
 			children = (
 				27BA1B931A8A77E600A08A58 /* test-A-jmw.h */,
 				27BA1B921A8A77E600A08A58 /* test-A-jmw.cpp */,
+				27C824641A87E58B00604C71 /* test-TL-input.txt */,
+				27C824651A87E65600604C71 /* test-PR-input.txt */,
+				27E2A4641AA5064300942F98 /* sp.txt */,
+				27E2A4661AA506AB00942F98 /* sp.out */,
+				27E2A4651AA5069400942F98 /* st.txt */,
+				27E2A46A1AA50AF900942F98 /* st-out.txt */,
+				27E2A4681AA5070B00942F98 /* st-mvc.out */,
+				27E2A4691AA5070B00942F98 /* st-mvct.out */,
 			);
 			name = "Test A";
 			sourceTree = "<group>";
