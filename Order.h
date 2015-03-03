@@ -127,9 +127,11 @@ equity(equity_in), price(price_in), quantity(quantity_in), order_num(order_num_i
 	}
 	if (price_in < 0) {
 		cerr << "\nPrice for an order was less than zero: exit(1)" << endl;
+		exit(1);
 	}
 	if (quantity_in < 0) {
 		cerr << "\nQuantity for an order was less than zero: exit(1)" << endl;
+		exit(1);
 	}
 }
 

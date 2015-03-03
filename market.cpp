@@ -107,8 +107,15 @@ int main(int argc, char *argv[]) {
 		Order* order_ptr = create_order_from_input(&input_str, &client_list, &equity_list,
 												   current_timestamp, orders_processed);
 
+		if (order_ptr->get_transaction() == Order::SELL) {
+			equity_list.at(order_ptr->get_equity()->get_equity_id()).add_min(order_ptr->get_timestamp(), order_ptr->get_price());
+		}
+		else {
+			equity_list.at(order_ptr->get_equity()->get_equity_id()).add_max(order_ptr->get_timestamp(), order_ptr->get_price());
+		}
+
 		if (current_timestamp != order_ptr->get_timestamp()) {
-			// add more for median in the future
+
 			if (median == YES_MEDIAN) {
 				output_median(&equity_list, current_timestamp, &out_ss);
 			} // if
@@ -119,6 +126,8 @@ int main(int argc, char *argv[]) {
 		make_matches(&sell_market, &buy_market, order_ptr, &client_list, verbose, orders_processed, &out_ss);
 	} // while
 
+
+	// Deal with end of program output
 	if (median == YES_MEDIAN) {
 		output_median(&equity_list, current_timestamp, &out_ss);
 	} // if
@@ -130,10 +139,22 @@ int main(int argc, char *argv[]) {
 	} // if
 
 	if (time_travelers == YES_TIME_TRAVELERS) {
-		output_time_travelers(&out_ss);
+		output_time_travelers(&equity_list, &out_ss);
 	}
 
 	cout << out_ss.str();
+
+	for (int i = 0; i < NUM_EQUITIES; ++i) {
+		while (!sell_market.at(i).empty()) {
+			delete sell_market.at(i).top();
+			sell_market.at(i).pop();
+		}
+
+		while (!buy_market.at(i).empty()) {
+			delete buy_market.at(i).top();
+			buy_market.at(i).pop();
+		}
+	}
 
 	return 0;
 } // main
@@ -274,6 +295,9 @@ void make_matches(vector <Sellpq>* s_market, vector <Buypq>* b_market, Order* or
 		if (order->get_quantity()) {
 			b_market->at(current_equity.get_equity_id()).push(order);
 		} // if
+		else {
+			delete order; order = nullptr;
+		}
 	}
 	else {
 
@@ -318,6 +342,9 @@ void make_matches(vector <Sellpq>* s_market, vector <Buypq>* b_market, Order* or
 		if (order->get_quantity()) {
 			s_market->at(current_equity.get_equity_id()).push(order);
 		} // if
+		else {
+			delete order; order = nullptr;
+		}
 	}
 
 	return;
@@ -387,16 +414,23 @@ void output_client_info(vector <Client>* clients, ostringstream* ss) {
 	return;
 } // output_client_info
 
-
-
-
-
-
-void output_time_travelers(ostringstream* ss) {
+void output_time_travelers(vector <Equity>* equities, ostringstream* ss) {
 
 	*ss << "---Time Travelers---\n";
 
-	
+	int buy_time, sell_time;
+	for (int i = 0; i < int(equities->size()); ++i) {
+
+		if ((equities->at(i).get_min_time() == -1) || (equities->at(i).get_max_time() == -1)) {
+			buy_time = sell_time = -1;
+		}
+		else {
+			buy_time = equities->at(i).get_min_time();
+			sell_time = equities->at(i).get_max_time();
+		}
+
+		*ss << "A time traveler would buy shares of Equity " << i << " at time: " << buy_time << " and sell these shares at time: " << sell_time << "\n";
+	}
 
 	return;
 } // output_time_travelers

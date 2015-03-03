@@ -33,7 +33,7 @@ enum TimeTravelers {NO_TIME_TRAVELERS, YES_TIME_TRAVELERS};
 void parse_command_line_input(int & argc, char *argv[], Verbose &verbose, Median &median,
 							  ClientInfo &client_info, TimeTravelers &time_travelers);
 
-Order* create_order_from_input(string* str, vector <Client> * clients, vector <Equity> * equities,
+Order* create_order_from_input(string* str, vector <Client>* clients, vector <Equity>* equities,
 							   int current_time, int orders_processed);
 
 void make_matches(vector <Sellpq>* s_market, vector <Buypq>* b_market, Order* order,
@@ -51,6 +51,6 @@ void output_summary(int orders_processed, ostringstream* ss);
 
 void output_client_info(vector <Client>* clients, ostringstream* ss);
 
-void output_time_travelers(ostringstream* ss);
+void output_time_travelers(vector <Equity>* equities, ostringstream* ss);
 
 #endif /* defined(__EECS_281_Project_2__market__) */

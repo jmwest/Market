@@ -43,19 +43,19 @@ int Client::get_client_id() {
 
 void Client::add_bought(int num) {
 	bought += num;
-	std::cerr << "Client: " << client_id << ", bought: " << bought << std::endl;
+
 	return;
 }
 
 void Client::add_sold(int num) {
 	sold += num;
-	std::cerr << "Client: " << client_id << ", sold: " << sold << std::endl;
+
 	return;
 }
 
 void Client::add_net_value(int price) {
 	net_value += price;
-	std::cerr << "Client: " << client_id << ", net_value: " << net_value << std::endl;
+
 	return;
 }
 

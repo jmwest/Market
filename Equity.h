@@ -16,7 +16,15 @@ using namespace std;
 
 class Equity {
 private:
+	struct TimeTraveler {
+		int time;
+		int price;
+	};
+
 	int equity_id;
+	TimeTraveler current_min;
+	TimeTraveler next_min;
+	TimeTraveler max;
 	vector <int> match_prices;
 
 public:
@@ -26,15 +34,29 @@ public:
 	int get_equity_id();
 
 	void add_price(int price);
+	void add_min(int timestamp, int price);
+	void add_max(int timestamp, int price);
 	int get_median();
 	int get_matches();
+	int get_min_time();
+	int get_max_time();
 };
 
 Equity::Equity()
-: equity_id(0) {}
+: equity_id(0)
+{
+	current_min.time = next_min.time = -1;
+	current_min.price = next_min.price = 0;
+	max.time = -1;
+}
 
 Equity::Equity(int e_id)
-: equity_id(e_id) {}
+: equity_id(e_id)
+{
+	current_min.time = next_min.time = -1;
+	current_min.price = next_min.price = 0;
+	max.time = -1;
+}
 
 int Equity::get_equity_id() {
 
@@ -47,6 +69,64 @@ void Equity::add_price(int price) {
 	
 	match_prices.insert(it, price);
 	
+	return;
+}
+
+void Equity::add_min(int timestamp, int price) {
+
+	if (current_min.time == -1) {
+		current_min.price = price;
+		current_min.time = timestamp;
+	}
+	else if (price < current_min.price) {
+		if (max.time == -1) {
+			current_min.price = price;
+			current_min.time = timestamp;
+		}
+		else if (next_min.price == -1) {
+			next_min.price = price;
+			next_min.time = timestamp;
+		}
+		else if (price < next_min.price) {
+			next_min.price = price;
+			next_min.time = timestamp;
+		}
+	}
+
+	return;
+}
+
+void Equity::add_max(int timestamp, int price) {
+
+	if (current_min.time != -1) {
+
+		if (((next_min.time != -1) && (price > next_min.price)) || (price > current_min.price)) {
+
+			if (price == max.price) {
+
+				if (next_min.time != -1) {
+					max.time = timestamp;
+					max.price = price;
+
+					current_min.time = next_min.time;
+					current_min.price = next_min.price;
+					next_min.time = -1;
+				}
+			}
+			else if (price > max.price) {
+
+				max.time = timestamp;
+				max.price = price;
+
+				if (next_min.time != -1) {
+					current_min.time = next_min.time;
+					current_min.price = next_min.price;
+					next_min.time = -1;
+				}
+			}
+		}
+	}
+
 	return;
 }
 
@@ -72,6 +152,16 @@ int Equity::get_median() {
 int Equity::get_matches() {
 	
 	return int(match_prices.size());
+}
+
+int Equity::get_min_time() {
+
+	return current_min.time;
+}
+
+int Equity::get_max_time() {
+
+	return max.time;
 }
 
 #endif

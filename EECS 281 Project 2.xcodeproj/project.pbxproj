@@ -50,6 +50,8 @@
 		27E2A4681AA5070B00942F98 /* st-mvc.out */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "st-mvc.out"; sourceTree = SOURCE_ROOT; };
 		27E2A4691AA5070B00942F98 /* st-mvct.out */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "st-mvct.out"; sourceTree = SOURCE_ROOT; };
 		27E2A46A1AA50AF900942F98 /* st-out.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "st-out.txt"; sourceTree = SOURCE_ROOT; };
+		27E2A46B1AA594BF00942F98 /* st-out-mvct.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "st-out-mvct.txt"; sourceTree = SOURCE_ROOT; };
+		27E2A46C1AA59AF400942F98 /* sp-out-mvct.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "sp-out-mvct.txt"; sourceTree = SOURCE_ROOT; };
 		27F74DD71A8FEFF90002B847 /* P2.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = P2.cpp; sourceTree = SOURCE_ROOT; };
 		27F9D9EC1A86BA0400FBE7A0 /* EECS 281 Project 2 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "EECS 281 Project 2"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -100,9 +102,11 @@
 				27C824641A87E58B00604C71 /* test-TL-input.txt */,
 				27C824651A87E65600604C71 /* test-PR-input.txt */,
 				27E2A4641AA5064300942F98 /* sp.txt */,
+				27E2A46C1AA59AF400942F98 /* sp-out-mvct.txt */,
 				27E2A4661AA506AB00942F98 /* sp.out */,
 				27E2A4651AA5069400942F98 /* st.txt */,
 				27E2A46A1AA50AF900942F98 /* st-out.txt */,
+				27E2A46B1AA594BF00942F98 /* st-out-mvct.txt */,
 				27E2A4681AA5070B00942F98 /* st-mvc.out */,
 				27E2A4691AA5070B00942F98 /* st-mvct.out */,
 			);
