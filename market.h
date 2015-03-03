@@ -34,7 +34,7 @@ void parse_command_line_input(int & argc, char *argv[], Verbose &verbose, Median
 							  ClientInfo &client_info, TimeTravelers &time_travelers);
 
 Order* create_order_from_input(string* str, vector <Client>* clients, vector <Equity>* equities,
-							   int current_time, int orders_processed);
+							   int current_time, int total_orders);
 
 void make_matches(vector <Sellpq>* s_market, vector <Buypq>* b_market, Order* order,
 				  vector <Client>* clients, Verbose &verbose, int &orders_processed,

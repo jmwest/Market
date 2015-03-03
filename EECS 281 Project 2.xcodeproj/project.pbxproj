@@ -42,6 +42,18 @@
 		27BA1B931A8A77E600A08A58 /* test-A-jmw.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "test-A-jmw.h"; sourceTree = SOURCE_ROOT; };
 		27C824641A87E58B00604C71 /* test-TL-input.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "test-TL-input.txt"; sourceTree = SOURCE_ROOT; };
 		27C824651A87E65600604C71 /* test-PR-input.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "test-PR-input.txt"; sourceTree = SOURCE_ROOT; };
+		27CC5DD31AA62355008EE170 /* test-4-m.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "test-4-m.txt"; sourceTree = SOURCE_ROOT; };
+		27CC5DD41AA623AE008EE170 /* test-1-v.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "test-1-v.txt"; sourceTree = SOURCE_ROOT; };
+		27CC5DD51AA623AE008EE170 /* test-2-c.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "test-2-c.txt"; sourceTree = SOURCE_ROOT; };
+		27CC5DD61AA623AE008EE170 /* test-3-t.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "test-3-t.txt"; sourceTree = SOURCE_ROOT; };
+		27CC5DD71AA62413008EE170 /* test-0-m.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "test-0-m.txt"; sourceTree = SOURCE_ROOT; };
+		27CC5DD81AA62678008EE170 /* test-0-m-correct.out */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "test-0-m-correct.out"; sourceTree = SOURCE_ROOT; };
+		27CC5DD91AA62678008EE170 /* test-4-m-correct.out */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "test-4-m-correct.out"; sourceTree = SOURCE_ROOT; };
+		27CC5DDB1AA62678008EE170 /* test-2-c-correct.out */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "test-2-c-correct.out"; sourceTree = SOURCE_ROOT; };
+		27CC5DDC1AA62678008EE170 /* test-3-t-correct.out */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "test-3-t-correct.out"; sourceTree = SOURCE_ROOT; };
+		27CC5DDD1AA63111008EE170 /* test-0-m.out */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "test-0-m.out"; sourceTree = SOURCE_ROOT; };
+		27CC5DDE1AA66ED0008EE170 /* test-1-v-correct.out */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "test-1-v-correct.out"; sourceTree = SOURCE_ROOT; };
+		27CC5DDF1AA6743A008EE170 /* test-3-t.out */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "test-3-t.out"; sourceTree = SOURCE_ROOT; };
 		27E2A4621AA3B23A00942F98 /* Client.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Client.h; sourceTree = SOURCE_ROOT; };
 		27E2A4631AA3B24500942F98 /* Equity.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Equity.h; sourceTree = SOURCE_ROOT; };
 		27E2A4641AA5064300942F98 /* sp.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = sp.txt; sourceTree = SOURCE_ROOT; };
@@ -89,6 +101,7 @@
 				272D140F1A870DF9006DFDB6 /* Order.h */,
 				27E2A4621AA3B23A00942F98 /* Client.h */,
 				27E2A4631AA3B24500942F98 /* Equity.h */,
+				27CC5DD21AA6232A008EE170 /* Test Cases */,
 				27BA1B8F1A8A779400A08A58 /* Test A */,
 			);
 			name = "Part A";
@@ -111,6 +124,25 @@
 				27E2A4691AA5070B00942F98 /* st-mvct.out */,
 			);
 			name = "Test A";
+			sourceTree = "<group>";
+		};
+		27CC5DD21AA6232A008EE170 /* Test Cases */ = {
+			isa = PBXGroup;
+			children = (
+				27CC5DD71AA62413008EE170 /* test-0-m.txt */,
+				27CC5DD81AA62678008EE170 /* test-0-m-correct.out */,
+				27CC5DDD1AA63111008EE170 /* test-0-m.out */,
+				27CC5DD41AA623AE008EE170 /* test-1-v.txt */,
+				27CC5DDE1AA66ED0008EE170 /* test-1-v-correct.out */,
+				27CC5DD51AA623AE008EE170 /* test-2-c.txt */,
+				27CC5DDB1AA62678008EE170 /* test-2-c-correct.out */,
+				27CC5DD61AA623AE008EE170 /* test-3-t.txt */,
+				27CC5DDC1AA62678008EE170 /* test-3-t-correct.out */,
+				27CC5DDF1AA6743A008EE170 /* test-3-t.out */,
+				27CC5DD31AA62355008EE170 /* test-4-m.txt */,
+				27CC5DD91AA62678008EE170 /* test-4-m-correct.out */,
+			);
+			name = "Test Cases";
 			sourceTree = "<group>";
 		};
 		27F9D9E31A86BA0400FBE7A0 = {

@@ -41,6 +41,7 @@ int main(int argc, char *argv[]) {
 
 	int current_timestamp = 0;
 	int orders_processed = 0;
+	int total_orders = 0;
 
 	// Command line input
 	parse_command_line_input(argc, argv, verbose, median, client_info, time_travelers);
@@ -102,11 +103,14 @@ int main(int argc, char *argv[]) {
 	istream& input_stream = (mode == TRADELIST) ? cin : in_ss;
 
 	out_ss << "Processing orders...\n";
+
 	// Run the market
 	while (getline(input_stream, input_str)) {
 		Order* order_ptr = create_order_from_input(&input_str, &client_list, &equity_list,
-												   current_timestamp, orders_processed);
+												   current_timestamp, total_orders);
+		++total_orders;
 
+		// for time traveler
 		if (order_ptr->get_transaction() == Order::SELL) {
 			equity_list.at(order_ptr->get_equity()->get_equity_id()).add_min(order_ptr->get_timestamp(), order_ptr->get_price());
 		}
@@ -197,7 +201,7 @@ void parse_command_line_input(int & argc, char *argv[], Verbose &verbose, Median
 } // parse_command_line_input
 
 Order* create_order_from_input(string* str, vector <Client> * clients, vector <Equity> * equities,
-							   int current_time, int orders_processed) {
+							   int current_time, int total_orders) {
 	int t_stamp = 0, c_id = 0, e_id = 0, price = 0, quant = 0;
 	Order::Transaction action = Order::NONE;
 
@@ -245,7 +249,7 @@ Order* create_order_from_input(string* str, vector <Client> * clients, vector <E
 	}
 
 	return new Order(t_stamp, &clients->at(c_id), action, &equities->at(e_id), price,
-					 quant, orders_processed, int(clients->size()), int(equities->size()));
+					 quant, total_orders, int(clients->size()), int(equities->size()));
 } // create_order_from_input
 
 void make_matches(vector <Sellpq>* s_market, vector <Buypq>* b_market, Order* order,

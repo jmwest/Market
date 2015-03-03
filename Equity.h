@@ -83,7 +83,7 @@ void Equity::add_min(int timestamp, int price) {
 			current_min.price = price;
 			current_min.time = timestamp;
 		}
-		else if (next_min.price == -1) {
+		else if (next_min.time == -1) {
 			next_min.price = price;
 			next_min.time = timestamp;
 		}

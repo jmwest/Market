@@ -137,7 +137,7 @@ $(PARTIAL_SUBMITFILE): $(PARTIAL_SUBMITFILES)
 FULL_SUBMITFILES=$(filter-out $(TESTSOURCES), $(wildcard Makefile *.h *.cpp test*.txt))
 $(FULL_SUBMITFILE): $(FULL_SUBMITFILES)
 	rm -f $(PARTIAL_SUBMITFILE) $(FULL_SUBMITFILE)
-	dos2unix $(FULL_SUBMITFILES)
+	#dos2unix $(FULL_SUBMITFILES)
 	tar -vczf $(FULL_SUBMITFILE) $(FULL_SUBMITFILES)
 	@echo !!! Final submission prepared, test cases included... READY FOR GRADING !!!
 
