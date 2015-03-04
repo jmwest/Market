@@ -114,23 +114,23 @@ Order::Order(int time_stamp_in, Client* client_in, Transaction transaction_in,
 equity(equity_in), price(price_in), quantity(quantity_in), order_num(order_num_in) {
 
 	if (time_stamp_in < 0) {
-		cerr << "\nTimestamp for an order was less than zero: exit(1)" << endl;
+		cerr << "Timestamp for an order was less than zero: exit(1)" << endl;
 		exit(1);
 	}
 	if ((client_in->get_client_id() < 0) || (client_in->get_client_id() >= num_clients_in)) {
-		cerr << "\nClient_id for an order was out of range: exit(1)" << endl;
+		cerr << "Client_id for an order was out of range: exit(1)" << endl;
 		exit(1);
 	}
 	if ((equity_in->get_equity_id() < 0) || (equity_in->get_equity_id() >= num_equities_in)) {
-		cerr << "\nEquity_id for an order was out of range: exit(1)" << endl;
+		cerr << "Equity_id for an order was out of range: exit(1)" << endl;
 		exit(1);
 	}
-	if (price_in < 0) {
-		cerr << "\nPrice for an order was less than zero: exit(1)" << endl;
+	if (price_in <= 0) {
+		cerr << "Price for an order was less than/equal to zero: exit(1)" << endl;
 		exit(1);
 	}
-	if (quantity_in < 0) {
-		cerr << "\nQuantity for an order was less than zero: exit(1)" << endl;
+	if (quantity_in <= 0) {
+		cerr << "Quantity for an order was less than/equal to zero: exit(1)" << endl;
 		exit(1);
 	}
 }

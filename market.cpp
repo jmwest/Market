@@ -244,7 +244,15 @@ Order* create_order_from_input(string* str, vector <Client> * clients, vector <E
 
 	// Check that timestamp isn't bad
 	if (t_stamp < current_time) {
-		cerr << "Timestamp for an order was less than current time. exit(1)" << endl;
+		cerr << "Timestamp for an order was less than current time: exit(1)" << endl;
+		exit(1);
+	}
+	if ((c_id < 0) || (int(clients->size()) <= c_id)) {
+		cerr << "Client_id for an order was out of range: exit(1)" << endl;
+		exit(1);
+	}
+	if ((e_id < 0) || (int(equities->size()) <= e_id)) {
+		cerr << "Equity_id for an order was out of range: exit(1)" << endl;
 		exit(1);
 	}
 
