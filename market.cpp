@@ -263,11 +263,11 @@ Order* create_order_from_input(string* str, vector <Client> * clients, vector <E
 void make_matches(vector <Sellpq>* s_market, vector <Buypq>* b_market, Order* order,
 				  vector <Client>* clients, Verbose &verbose, int &orders_processed,
 				  ostringstream* ss) {
+	
+	int current_client = order->get_client()->get_client_id();
+	int current_equity = order->get_equity()->get_equity_id();
 
 	if (order->get_transaction() == Order::BUY) {
-
-		int current_client = order->get_client()->get_client_id();
-		int current_equity = order->get_equity()->get_equity_id();
 
 		// remove any empty equity orders from the top of the pq.
 		while (!s_market->at(current_equity).empty()
@@ -320,9 +320,6 @@ void make_matches(vector <Sellpq>* s_market, vector <Buypq>* b_market, Order* or
 		}
 	}
 	else {
-
-		int current_client = order->get_client()->get_client_id();
-		int current_equity = order->get_equity()->get_equity_id();
 
 		// remove any empty equity orders from the top of the pq.
 		while (!b_market->at(current_equity).empty()
