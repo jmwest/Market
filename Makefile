@@ -187,13 +187,14 @@ help:
 #####################
 # MY OWN TEST CASES #
 #####################
-jtest: market.cpp market.h P2.h Order.h test-A-jmw.cpp test-A-jmw.h
-#	g++ $(CXXFLAGS) -O3 market.cpp -o market
-## These next two are only useful when cerr input is added
-#	./market < test-TL-input.txt
-#	./market < test-PR-input.txt
-	g++ $(CXXFLAGS) -O3 test-A-jmw.cpp -o test-jmw
-	./test-jmw
+jtest: market.cpp market.h P2.h P2.cpp Order.h Client.h Equity.h
+	g++ $(CXXFLAGS) -Wvla -O3 market.cpp P2.cpp -o market
+	./market -m < test-0-m.txt > test-0-m.out
+	./market -t < test-1-t.txt > test-1-t.out
+	./market -c < test-2-c.txt > test-2-c.out
+	diff -q test-0-m.out test-0-m-correct.out
+	diff -q test-1-t.out test-1-t-correct.out
+	diff -q test-2-c.out test-2-c-correct.out
 
 #######################
 # TODO (begin) #

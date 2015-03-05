@@ -266,17 +266,17 @@ void make_matches(vector <Sellpq>* s_market, vector <Buypq>* b_market, Order* or
 
 	if (order->get_transaction() == Order::BUY) {
 
-		Client current_client = *order->get_client();
-		Equity current_equity = *order->get_equity();
+		int current_client = order->get_client()->get_client_id();
+		int current_equity = order->get_equity()->get_equity_id();
 
 		// remove any empty equity orders from the top of the pq.
-		while (!s_market->at(current_equity.get_equity_id()).empty()
-			   && !s_market->at(current_equity.get_equity_id()).top()->get_quantity()) {
-			delete s_market->at(current_equity.get_equity_id()).top();
-			s_market->at(current_equity.get_equity_id()).pop();
+		while (!s_market->at(current_equity).empty()
+			   && !s_market->at(current_equity).top()->get_quantity()) {
+			delete s_market->at(current_equity).top();
+			s_market->at(current_equity).pop();
 		}
 
-		Sellpq market_cpy = s_market->at(current_equity.get_equity_id());
+		Sellpq market_cpy = s_market->at(current_equity);
 
 		while (order->get_quantity() && !market_cpy.empty()) {
 
@@ -287,6 +287,8 @@ void make_matches(vector <Sellpq>* s_market, vector <Buypq>* b_market, Order* or
 			if (can_trade(order, market_cpy.top())) {
 				++orders_processed;
 
+				int market_client = market_cpy.top()->get_client()->get_client_id();
+
 				int equity_bought = (order->get_quantity() <= market_cpy.top()->get_quantity()) ? order->get_quantity() : market_cpy.top()->get_quantity();
 				int price_bought = market_cpy.top()->get_price();
 				int total_spent = equity_bought * price_bought;
@@ -294,16 +296,16 @@ void make_matches(vector <Sellpq>* s_market, vector <Buypq>* b_market, Order* or
 				order->change_quantity(equity_bought);
 				market_cpy.top()->change_quantity(equity_bought);
 
-				clients->at(current_client.get_client_id()).add_bought(equity_bought);
-				clients->at(current_client.get_client_id()).add_net_value(-total_spent);
-				clients->at(market_cpy.top()->get_client()->get_client_id()).add_sold(equity_bought);
-				clients->at(market_cpy.top()->get_client()->get_client_id()).add_net_value(total_spent);
+				clients->at(current_client).add_bought(equity_bought);
+				clients->at(current_client).add_net_value(-total_spent);
+				clients->at(market_client).add_sold(equity_bought);
+				clients->at(market_client).add_net_value(total_spent);
 
 				order->get_equity()->add_price(price_bought);
 
 				if (verbose == YES_VERBOSE) {
-					output_verbose(current_client.get_client_id(), market_cpy.top()->get_client()->get_client_id(),
-								   current_equity.get_equity_id(), equity_bought, price_bought, ss);
+					output_verbose(current_client, market_client, current_equity, equity_bought,
+								   price_bought, ss);
 				} // if verbose == YES_VERBOSE
 			} // if can_trade(order, market_cpy.top()
 
@@ -311,7 +313,7 @@ void make_matches(vector <Sellpq>* s_market, vector <Buypq>* b_market, Order* or
 		} // while
 
 		if (order->get_quantity()) {
-			b_market->at(current_equity.get_equity_id()).push(order);
+			b_market->at(current_equity).push(order);
 		} // if
 		else {
 			delete order; order = nullptr;
@@ -319,14 +321,14 @@ void make_matches(vector <Sellpq>* s_market, vector <Buypq>* b_market, Order* or
 	}
 	else {
 
-		Client current_client = *order->get_client();
-		Equity current_equity = *order->get_equity();
+		int current_client = order->get_client()->get_client_id();
+		int current_equity = order->get_equity()->get_equity_id();
 
 		// remove any empty equity orders from the top of the pq.
-		while (!b_market->at(order->get_equity()->get_equity_id()).empty()
-			   && !b_market->at(order->get_equity()->get_equity_id()).top()->get_quantity()) {
-			delete b_market->at(order->get_equity()->get_equity_id()).top();
-			b_market->at(order->get_equity()->get_equity_id()).pop();
+		while (!b_market->at(current_equity).empty()
+			   && !b_market->at(current_equity).top()->get_quantity()) {
+			delete b_market->at(current_equity).top();
+			b_market->at(current_equity).pop();
 		}
 
 		Buypq market_cpy = b_market->at(order->get_equity()->get_equity_id());
@@ -340,6 +342,8 @@ void make_matches(vector <Sellpq>* s_market, vector <Buypq>* b_market, Order* or
 			if (can_trade(order, market_cpy.top())) {
 				++orders_processed;
 
+				int market_client = market_cpy.top()->get_client()->get_client_id();
+
 				int equity_bought = (order->get_quantity() <= market_cpy.top()->get_quantity()) ? order->get_quantity() : market_cpy.top()->get_quantity();
 				int price_bought = market_cpy.top()->get_price();
 				int total_spent = equity_bought * price_bought;
@@ -347,16 +351,15 @@ void make_matches(vector <Sellpq>* s_market, vector <Buypq>* b_market, Order* or
 				order->change_quantity(equity_bought);
 				market_cpy.top()->change_quantity(equity_bought);
 
-				clients->at(current_client.get_client_id()).add_sold(equity_bought);
-				clients->at(current_client.get_client_id()).add_net_value(total_spent);
-				clients->at(market_cpy.top()->get_client()->get_client_id()).add_bought(equity_bought);
-				clients->at(market_cpy.top()->get_client()->get_client_id()).add_net_value(-total_spent);
+				clients->at(current_client).add_sold(equity_bought);
+				clients->at(current_client).add_net_value(total_spent);
+				clients->at(market_client).add_bought(equity_bought);
+				clients->at(market_client).add_net_value(-total_spent);
 
 				order->get_equity()->add_price(price_bought);
 
 				if (verbose == YES_VERBOSE) {
-					output_verbose(market_cpy.top()->get_client()->get_client_id(), current_client.get_client_id(),
-								   current_equity.get_equity_id(), equity_bought, price_bought, ss);
+					output_verbose(market_client, current_client, current_equity, equity_bought, price_bought, ss);
 				} // if verbose == YES_VERBOSE
 			} // if can_trade(order, market_cpy.top()
 
@@ -364,7 +367,7 @@ void make_matches(vector <Sellpq>* s_market, vector <Buypq>* b_market, Order* or
 		} // while
 
 		if (order->get_quantity()) {
-			s_market->at(current_equity.get_equity_id()).push(order);
+			s_market->at(current_equity).push(order);
 		} // if
 		else {
 			delete order; order = nullptr;
