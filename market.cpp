@@ -269,14 +269,20 @@ void make_matches(vector <Sellpq>* s_market, vector <Buypq>* b_market, Order* or
 		Client current_client = *order->get_client();
 		Equity current_equity = *order->get_equity();
 
-		Sellpq market_cpy = s_market->at(current_equity.get_equity_id());
-
 		// remove any empty equity orders from the top of the pq.
-		while (!market_cpy.empty() && !market_cpy.top()->get_quantity()) {
-			market_cpy.pop();
+		while (!s_market->at(current_equity.get_equity_id()).empty()
+			   && !s_market->at(current_equity.get_equity_id()).top()->get_quantity()) {
+			delete s_market->at(current_equity.get_equity_id()).top();
+			s_market->at(current_equity.get_equity_id()).pop();
 		}
 
+		Sellpq market_cpy = s_market->at(current_equity.get_equity_id());
+
 		while (order->get_quantity() && !market_cpy.empty()) {
+
+			if (order->get_price() < market_cpy.top()->get_price()) {
+				break;
+			}
 
 			if (can_trade(order, market_cpy.top())) {
 				++orders_processed;
@@ -316,14 +322,20 @@ void make_matches(vector <Sellpq>* s_market, vector <Buypq>* b_market, Order* or
 		Client current_client = *order->get_client();
 		Equity current_equity = *order->get_equity();
 
-		Buypq market_cpy = b_market->at(order->get_equity()->get_equity_id());
-
 		// remove any empty equity orders from the top of the pq.
-		while (!market_cpy.empty() && !market_cpy.top()->get_quantity()) {
-			market_cpy.pop();
+		while (!b_market->at(order->get_equity()->get_equity_id()).empty()
+			   && !b_market->at(order->get_equity()->get_equity_id()).top()->get_quantity()) {
+			delete b_market->at(order->get_equity()->get_equity_id()).top();
+			b_market->at(order->get_equity()->get_equity_id()).pop();
 		}
 
+		Buypq market_cpy = b_market->at(order->get_equity()->get_equity_id());
+
 		while (!market_cpy.empty() && order->get_quantity()) {
+
+			if (order->get_price() > market_cpy.top()->get_price()) {
+				break;
+			}
 
 			if (can_trade(order, market_cpy.top())) {
 				++orders_processed;
