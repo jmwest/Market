@@ -121,7 +121,7 @@ int main(int argc, char *argv[]) {
 		if (current_timestamp != order_ptr->get_timestamp()) {
 
 			if (median == YES_MEDIAN) {
-				output_median(&equity_list, current_timestamp, &out_ss);
+				output_median(&equity_list, current_timestamp, out_ss);
 			} // if
 
 			current_timestamp = order_ptr->get_timestamp();
@@ -133,7 +133,7 @@ int main(int argc, char *argv[]) {
 
 	// Deal with end of program output
 	if (median == YES_MEDIAN) {
-		output_median(&equity_list, current_timestamp, &out_ss);
+		output_median(&equity_list, current_timestamp, out_ss);
 	} // if
 
 	output_summary(orders_processed, &out_ss);
@@ -206,7 +206,7 @@ Order* create_order_from_input(string* str, vector <Client> * clients, vector <E
 	Order::Transaction action = Order::NONE;
 
 	int current_idx = 0;
-	for (int i = 0; i <= (int)str->length(); ++i) {
+	for (int i = 1; i <= (int)str->length(); ++i) {
 		if ((i == (int)str->length()) || (str->at(i) == ' ')) {
 			switch (str->at(current_idx)) {
 				case 'C':
@@ -269,11 +269,13 @@ void make_matches(vector <Sellpq>* s_market, vector <Buypq>* b_market, Order* or
 
 	if (order->get_transaction() == Order::BUY) {
 
+		Sellpq* market_ptr = &s_market->at(current_equity);
+
 		// remove any empty equity orders from the top of the pq.
-		while (!s_market->at(current_equity).empty()
-			   && !s_market->at(current_equity).top()->get_quantity()) {
-			delete s_market->at(current_equity).top();
-			s_market->at(current_equity).pop();
+		while (!market_ptr->empty()
+			   && !market_ptr->top()->get_quantity()) {
+			delete market_ptr->top();
+			market_ptr->pop();
 		}
 
 		Sellpq market_cpy = s_market->at(current_equity);
@@ -321,47 +323,61 @@ void make_matches(vector <Sellpq>* s_market, vector <Buypq>* b_market, Order* or
 	}
 	else {
 
+		Buypq* market_ptr = &b_market->at(current_equity);
 		// remove any empty equity orders from the top of the pq.
-		while (!b_market->at(current_equity).empty()
-			   && !b_market->at(current_equity).top()->get_quantity()) {
-			delete b_market->at(current_equity).top();
-			b_market->at(current_equity).pop();
+		while (!market_ptr->empty()
+			   && !market_ptr->top()->get_quantity()) {
+			delete market_ptr->top();
+			market_ptr->pop();
 		}
 
-		Buypq market_cpy = b_market->at(order->get_equity()->get_equity_id());
+//		Buypq market_cpy = b_market->at(order->get_equity()->get_equity_id());
+		Buypq market_cpy;
 
-		while (!market_cpy.empty() && order->get_quantity()) {
+		while (!market_ptr->empty() && order->get_quantity()) {
 
-			if (order->get_price() > market_cpy.top()->get_price()) {
+			if (order->get_price() > market_ptr->top()->get_price()) {
 				break;
 			}
 
-			if (can_trade(order, market_cpy.top())) {
+			if (can_trade(order, market_ptr->top())) {
 				++orders_processed;
 
-				int market_client = market_cpy.top()->get_client()->get_client_id();
+				int market_client = market_ptr->top()->get_client()->get_client_id();
 
-				int equity_bought = (order->get_quantity() <= market_cpy.top()->get_quantity()) ? order->get_quantity() : market_cpy.top()->get_quantity();
-				int price_bought = market_cpy.top()->get_price();
+				int equity_bought = (order->get_quantity() <= market_ptr->top()->get_quantity()) ? order->get_quantity() : market_ptr->top()->get_quantity();
+				int price_bought = market_ptr->top()->get_price();
 				int total_spent = equity_bought * price_bought;
 
 				order->change_quantity(equity_bought);
-				market_cpy.top()->change_quantity(equity_bought);
+				market_ptr->top()->change_quantity(equity_bought);
 
 				clients->at(current_client).add_sold(equity_bought);
 				clients->at(current_client).add_net_value(total_spent);
 				clients->at(market_client).add_bought(equity_bought);
 				clients->at(market_client).add_net_value(-total_spent);
-
+				
 				order->get_equity()->add_price(price_bought);
-
+				
 				if (verbose == YES_VERBOSE) {
 					output_verbose(market_client, current_client, current_equity, equity_bought, price_bought, ss);
 				} // if verbose == YES_VERBOSE
 			} // if can_trade(order, market_cpy.top()
 
-			market_cpy.pop();
+			market_cpy.push(market_ptr->top());
+			market_ptr->pop();
 		} // while
+
+		while (!market_cpy.empty()) {
+			if (market_cpy.top()->get_quantity()) {
+				market_ptr->push(market_cpy.top());
+				market_cpy.pop();
+			}
+			else {
+				delete market_cpy.top();
+				market_cpy.pop();
+			}
+		}
 
 		if (order->get_quantity()) {
 			s_market->at(current_equity).push(order);
@@ -370,6 +386,46 @@ void make_matches(vector <Sellpq>* s_market, vector <Buypq>* b_market, Order* or
 			delete order; order = nullptr;
 		}
 	}
+//		while (!market_cpy.empty() && order->get_quantity()) {
+//
+//			if (order->get_price() > market_cpy.top()->get_price()) {
+//				break;
+//			}
+//
+//			if (can_trade(order, market_cpy.top())) {
+//				++orders_processed;
+//
+//				int market_client = market_cpy.top()->get_client()->get_client_id();
+//
+//				int equity_bought = (order->get_quantity() <= market_cpy.top()->get_quantity()) ? order->get_quantity() : market_cpy.top()->get_quantity();
+//				int price_bought = market_cpy.top()->get_price();
+//				int total_spent = equity_bought * price_bought;
+//
+//				order->change_quantity(equity_bought);
+//				market_cpy.top()->change_quantity(equity_bought);
+//
+//				clients->at(current_client).add_sold(equity_bought);
+//				clients->at(current_client).add_net_value(total_spent);
+//				clients->at(market_client).add_bought(equity_bought);
+//				clients->at(market_client).add_net_value(-total_spent);
+//
+//				order->get_equity()->add_price(price_bought);
+//
+//				if (verbose == YES_VERBOSE) {
+//					output_verbose(market_client, current_client, current_equity, equity_bought, price_bought, ss);
+//				} // if verbose == YES_VERBOSE
+//			} // if can_trade(order, market_cpy.top()
+//
+//			market_cpy.pop();
+//		} // while
+//
+//		if (order->get_quantity()) {
+//			s_market->at(current_equity).push(order);
+//		} // if
+//		else {
+//			delete order; order = nullptr;
+//		}
+//	}
 
 	return;
 } // make_matches
@@ -409,11 +465,12 @@ void output_verbose(int buying_client, int selling_client, int equity, int num_s
 	return;
 } // output_verbose
 
-void output_median(vector <Equity>* equities, int timestamp, ostringstream* ss) {
+void output_median(vector <Equity>* equities, int timestamp, ostringstream &ss) {
 
 	for (int i = 0; i < int(equities->size()); ++i) {
-		if (equities->at(i).get_median() != -1) {
-			*ss << "Median match price of Equity " << i << " at time " << timestamp << " is $" << equities->at(i).get_median() << "\n";
+		int median = equities->at(i).get_median();
+		if (median != -1) {
+			ss << "Median match price of Equity " << i << " at time " << timestamp << " is $" << median << "\n";
 		} // if
 	} // for
 
