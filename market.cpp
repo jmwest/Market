@@ -123,7 +123,7 @@ int main(int argc, char *argv[]) {
 		if (current_timestamp != order_ptr->get_timestamp()) {
 
 			if (median == YES_MEDIAN) {
-				output_median(&equity_list, current_timestamp, &out_ss);
+				output_median(&equity_list, current_timestamp, out_ss);
 			} // if
 
 			current_timestamp = order_ptr->get_timestamp();
@@ -135,17 +135,17 @@ int main(int argc, char *argv[]) {
 
 	// Deal with end of program output
 	if (median == YES_MEDIAN) {
-		output_median(&equity_list, current_timestamp, &out_ss);
+		output_median(&equity_list, current_timestamp, out_ss);
 	} // if
 
-	output_summary(orders_processed, &out_ss);
+	output_summary(orders_processed, out_ss);
 
 	if (client_info == YES_CLIENT_INFO) {
-		output_client_info(&client_list, &out_ss);
+		output_client_info(&client_list, out_ss);
 	} // if
 
 	if (time_travelers == YES_TIME_TRAVELERS) {
-		output_time_travelers(&equity_list, &out_ss);
+		output_time_travelers(&equity_list, out_ss);
 	}
 
 	cout << out_ss.str();
@@ -273,14 +273,6 @@ void make_matches(vector <Sellpq>* s_market, vector <Buypq>* b_market, Order* or
 
 		Sellpq* market_ptr = &s_market->at(current_equity);
 
-		// remove any empty equity orders from the top of the pq.
-		while (!market_ptr->empty()
-			   && !market_ptr->top()->get_quantity()) {
-			delete market_ptr->top();
-			market_ptr->pop();
-		}
-//
-//		Sellpq market_cpy = s_market->at(current_equity);
 		queue <Order*> market_cpy;
 
 		while (order->get_quantity() && !market_ptr->empty()) {
@@ -327,14 +319,8 @@ void make_matches(vector <Sellpq>* s_market, vector <Buypq>* b_market, Order* or
 		} // while
 
 		while (!market_cpy.empty()) {
-//			if (market_cpy.front()->get_quantity()) {
-				market_ptr->push(market_cpy.front());
-				market_cpy.pop();
-//			}
-//			else {
-//				delete market_cpy.front();
-//				market_cpy.pop();
-//			}
+			market_ptr->push(market_cpy.front());
+			market_cpy.pop();
 		}
 
 		if (order->get_quantity()) {
@@ -347,14 +333,7 @@ void make_matches(vector <Sellpq>* s_market, vector <Buypq>* b_market, Order* or
 	else {
 
 		Buypq* market_ptr = &b_market->at(current_equity);
-		// remove any empty equity orders from the top of the pq.
-//		while (!market_ptr->empty()
-//			   && !market_ptr->top()->get_quantity()) {
-//			delete market_ptr->top();
-//			market_ptr->pop();
-//		}
-//
-//		Buypq market_cpy = b_market->at(order->get_equity()->get_equity_id());
+
 		queue <Order*> market_cpy;
 
 		while (!market_ptr->empty() && order->get_quantity()) {
@@ -400,14 +379,8 @@ void make_matches(vector <Sellpq>* s_market, vector <Buypq>* b_market, Order* or
 		} // while
 
 		while (!market_cpy.empty()) {
-//			if (market_cpy.front()->get_quantity()) {
-				market_ptr->push(market_cpy.front());
-				market_cpy.pop();
-//			}
-//			else {
-//				delete market_cpy.front();
-//				market_cpy.pop();
-//			}
+			market_ptr->push(market_cpy.front());
+			market_cpy.pop();
 		}
 
 		if (order->get_quantity()) {
@@ -456,39 +429,39 @@ void output_verbose(int buying_client, int selling_client, int equity, int num_s
 	return;
 } // output_verbose
 
-void output_median(vector <Equity>* equities, int timestamp, ostringstream *ss) {
+void output_median(vector <Equity>* equities, int timestamp, ostringstream &ss) {
 
 	for (int i = 0; i < int(equities->size()); ++i) {
 		int median = equities->at(i).get_median();
 		if (median != -1) {
-			*ss << "Median match price of Equity " << i << " at time " << timestamp << " is $" << median << "\n";
+			ss << "Median match price of Equity " << i << " at time " << timestamp << " is $" << median << "\n";
 		} // if
 	} // for
 
 	return;
 } // output_median
 
-void output_summary(int orders_processed, ostringstream* ss) {
+void output_summary(int orders_processed, ostringstream &ss) {
 
-	*ss << "---End of Day---\nOrders Processed: " << orders_processed << "\n";
+	ss << "---End of Day---\nOrders Processed: " << orders_processed << "\n";
 
 	return;
 } // output_summary
 
-void output_client_info(vector <Client>* clients, ostringstream* ss) {
+void output_client_info(vector <Client>* clients, ostringstream &ss) {
 
-	*ss << "---Client Info---\n";
+	ss << "---Client Info---\n";
 
 	for (int i = 0; i < int(clients->size()); ++i) {
-		*ss << "Client " << i << " bought " << clients->at(i).get_bought() << " and sold " << clients->at(i).get_sold() << " for a net transfer of $" << clients->at(i).get_net_value() << "\n";
+		ss << "Client " << i << " bought " << clients->at(i).get_bought() << " and sold " << clients->at(i).get_sold() << " for a net transfer of $" << clients->at(i).get_net_value() << "\n";
 	}
 
 	return;
 } // output_client_info
 
-void output_time_travelers(vector <Equity>* equities, ostringstream* ss) {
+void output_time_travelers(vector <Equity>* equities, ostringstream &ss) {
 
-	*ss << "---Time Travelers---\n";
+	ss << "---Time Travelers---\n";
 
 	int buy_time, sell_time;
 	for (int i = 0; i < int(equities->size()); ++i) {
@@ -501,7 +474,7 @@ void output_time_travelers(vector <Equity>* equities, ostringstream* ss) {
 			sell_time = equities->at(i).get_max_time();
 		}
 
-		*ss << "A time traveler would buy shares of Equity " << i << " at time: " << buy_time << " and sell these shares at time: " << sell_time << "\n";
+		ss << "A time traveler would buy shares of Equity " << i << " at time: " << buy_time << " and sell these shares at time: " << sell_time << "\n";
 	}
 
 	return;

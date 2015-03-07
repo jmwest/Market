@@ -26,7 +26,6 @@ private:
 	TimeTraveler current_min;
 	TimeTraveler next_min;
 	TimeTraveler max;
-//	vector <int> match_prices;
 	priority_queue <int, vector <int>, greater <int> > upper_match_prices;
 	priority_queue <int, vector <int>, less <int> > lower_match_prices;
 
@@ -68,10 +67,6 @@ int Equity::get_equity_id() {
 }
 
 void Equity::add_price(int price_in) {
-
-//	vector<int>::iterator it = upper_bound(match_prices.begin(), match_prices.end(), price);
-//
-//	match_prices.insert(it, price);
 
 	if (!lower_match_prices.empty() && !upper_match_prices.empty()) {
 		if (lower_match_prices.size() == upper_match_prices.size()) {
@@ -174,22 +169,6 @@ void Equity::add_max(int timestamp, int price_in) {
 }
 
 int Equity::get_median() {
-
-//	if (match_prices.size() == 0) {
-//		return -1;
-//	}
-//	else if (match_prices.size() == 1) {
-//		return match_prices.at(0);
-//	}
-//	else if (match_prices.size() % 2) {
-//		return match_prices.at(match_prices.size() / 2);
-//	}
-//	else {
-//		int one = match_prices.at((match_prices.size() / 2) - 1);
-//		int two = match_prices.at(match_prices.size() / 2);
-//
-//		return (one + two) / 2;
-//	}
 
 	if (!lower_match_prices.empty() && !upper_match_prices.empty()) {
 		if (lower_match_prices.size() == upper_match_prices.size()) {
