@@ -45,7 +45,7 @@ bool can_trade(Order* ord1, Order* ord2);
 void output_verbose(int buying_client, int selling_client, int equity, int num_shares,
 					int price, ostringstream &ss);
 
-void output_median(vector <Equity>* equities, int timestamp, ostringstream &ss);
+void output_median(vector <Equity>* equities, int timestamp, ostringstream* ss);
 
 void output_summary(int orders_processed, ostringstream* ss);
 

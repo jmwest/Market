@@ -123,7 +123,7 @@ int main(int argc, char *argv[]) {
 		if (current_timestamp != order_ptr->get_timestamp()) {
 
 			if (median == YES_MEDIAN) {
-				output_median(&equity_list, current_timestamp, out_ss);
+				output_median(&equity_list, current_timestamp, &out_ss);
 			} // if
 
 			current_timestamp = order_ptr->get_timestamp();
@@ -135,7 +135,7 @@ int main(int argc, char *argv[]) {
 
 	// Deal with end of program output
 	if (median == YES_MEDIAN) {
-		output_median(&equity_list, current_timestamp, out_ss);
+		output_median(&equity_list, current_timestamp, &out_ss);
 	} // if
 
 	output_summary(orders_processed, &out_ss);
@@ -456,12 +456,12 @@ void output_verbose(int buying_client, int selling_client, int equity, int num_s
 	return;
 } // output_verbose
 
-void output_median(vector <Equity>* equities, int timestamp, ostringstream &ss) {
+void output_median(vector <Equity>* equities, int timestamp, ostringstream *ss) {
 
 	for (int i = 0; i < int(equities->size()); ++i) {
 		int median = equities->at(i).get_median();
 		if (median != -1) {
-			ss << "Median match price of Equity " << i << " at time " << timestamp << " is $" << median << "\n";
+			*ss << "Median match price of Equity " << i << " at time " << timestamp << " is $" << median << "\n";
 		} // if
 	} // for
 
