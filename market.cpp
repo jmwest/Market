@@ -111,11 +111,13 @@ int main(int argc, char *argv[]) {
 		++total_orders;
 
 		// for time traveler
-		if (order_ptr->get_transaction() == Order::SELL) {
-			equity_list.at(order_ptr->get_equity()->get_equity_id()).add_min(order_ptr->get_timestamp(), order_ptr->get_price());
-		}
-		else {
-			equity_list.at(order_ptr->get_equity()->get_equity_id()).add_max(order_ptr->get_timestamp(), order_ptr->get_price());
+		if (time_travelers == YES_TIME_TRAVELERS) {
+			if (order_ptr->get_transaction() == Order::SELL) {
+				equity_list.at(order_ptr->get_equity()->get_equity_id()).add_min(order_ptr->get_timestamp(), order_ptr->get_price());
+			}
+			else {
+				equity_list.at(order_ptr->get_equity()->get_equity_id()).add_max(order_ptr->get_timestamp(), order_ptr->get_price());
+			}
 		}
 
 		if (current_timestamp != order_ptr->get_timestamp()) {
@@ -127,7 +129,7 @@ int main(int argc, char *argv[]) {
 			current_timestamp = order_ptr->get_timestamp();
 		} // if
 
-		make_matches(&sell_market, &buy_market, order_ptr, &client_list, verbose, orders_processed, &out_ss);
+		make_matches(&sell_market, &buy_market, order_ptr, &client_list, verbose, median, orders_processed, out_ss);
 	} // while
 
 
@@ -261,8 +263,8 @@ Order* create_order_from_input(string* str, vector <Client> * clients, vector <E
 } // create_order_from_input
 
 void make_matches(vector <Sellpq>* s_market, vector <Buypq>* b_market, Order* order,
-				  vector <Client>* clients, Verbose &verbose, int &orders_processed,
-				  ostringstream* ss) {
+				  vector <Client>* clients, Verbose &verbose, Median &median,
+				  int &orders_processed, ostringstream &ss) {
 	
 	int current_client = order->get_client()->get_client_id();
 	int current_equity = order->get_equity()->get_equity_id();
@@ -277,33 +279,36 @@ void make_matches(vector <Sellpq>* s_market, vector <Buypq>* b_market, Order* or
 			delete market_ptr->top();
 			market_ptr->pop();
 		}
+//
+//		Sellpq market_cpy = s_market->at(current_equity);
+		queue <Order*> market_cpy;
 
-		Sellpq market_cpy = s_market->at(current_equity);
+		while (order->get_quantity() && !market_ptr->empty()) {
 
-		while (order->get_quantity() && !market_cpy.empty()) {
-
-			if (order->get_price() < market_cpy.top()->get_price()) {
+			if (order->get_price() < market_ptr->top()->get_price()) {
 				break;
 			}
 
-			if (can_trade(order, market_cpy.top())) {
+			if (can_trade(order, market_ptr->top())) {
 				++orders_processed;
 
-				int market_client = market_cpy.top()->get_client()->get_client_id();
+				int market_client = market_ptr->top()->get_client()->get_client_id();
 
-				int equity_bought = (order->get_quantity() <= market_cpy.top()->get_quantity()) ? order->get_quantity() : market_cpy.top()->get_quantity();
-				int price_bought = market_cpy.top()->get_price();
+				int equity_bought = (order->get_quantity() <= market_ptr->top()->get_quantity()) ? order->get_quantity() : market_ptr->top()->get_quantity();
+				int price_bought = market_ptr->top()->get_price();
 				int total_spent = equity_bought * price_bought;
 
 				order->change_quantity(equity_bought);
-				market_cpy.top()->change_quantity(equity_bought);
+				market_ptr->top()->change_quantity(equity_bought);
 
 				clients->at(current_client).add_bought(equity_bought);
 				clients->at(current_client).add_net_value(-total_spent);
 				clients->at(market_client).add_sold(equity_bought);
 				clients->at(market_client).add_net_value(total_spent);
 
-				order->get_equity()->add_price(price_bought);
+				if (median == YES_MEDIAN) {
+					order->get_equity()->add_price(price_bought);
+				}
 
 				if (verbose == YES_VERBOSE) {
 					output_verbose(current_client, market_client, current_equity, equity_bought,
@@ -311,8 +316,26 @@ void make_matches(vector <Sellpq>* s_market, vector <Buypq>* b_market, Order* or
 				} // if verbose == YES_VERBOSE
 			} // if can_trade(order, market_cpy.top()
 
-			market_cpy.pop();
+			if (market_ptr->top()->get_quantity()) {
+				market_cpy.push(market_ptr->top());
+			}
+			else {
+				delete market_ptr->top();
+			}
+
+			market_ptr->pop();
 		} // while
+
+		while (!market_cpy.empty()) {
+//			if (market_cpy.front()->get_quantity()) {
+				market_ptr->push(market_cpy.front());
+				market_cpy.pop();
+//			}
+//			else {
+//				delete market_cpy.front();
+//				market_cpy.pop();
+//			}
+		}
 
 		if (order->get_quantity()) {
 			b_market->at(current_equity).push(order);
@@ -325,14 +348,14 @@ void make_matches(vector <Sellpq>* s_market, vector <Buypq>* b_market, Order* or
 
 		Buypq* market_ptr = &b_market->at(current_equity);
 		// remove any empty equity orders from the top of the pq.
-		while (!market_ptr->empty()
-			   && !market_ptr->top()->get_quantity()) {
-			delete market_ptr->top();
-			market_ptr->pop();
-		}
-
+//		while (!market_ptr->empty()
+//			   && !market_ptr->top()->get_quantity()) {
+//			delete market_ptr->top();
+//			market_ptr->pop();
+//		}
+//
 //		Buypq market_cpy = b_market->at(order->get_equity()->get_equity_id());
-		Buypq market_cpy;
+		queue <Order*> market_cpy;
 
 		while (!market_ptr->empty() && order->get_quantity()) {
 
@@ -356,27 +379,35 @@ void make_matches(vector <Sellpq>* s_market, vector <Buypq>* b_market, Order* or
 				clients->at(current_client).add_net_value(total_spent);
 				clients->at(market_client).add_bought(equity_bought);
 				clients->at(market_client).add_net_value(-total_spent);
-				
-				order->get_equity()->add_price(price_bought);
+
+				if (median == YES_MEDIAN) {
+					order->get_equity()->add_price(price_bought);
+				}
 				
 				if (verbose == YES_VERBOSE) {
 					output_verbose(market_client, current_client, current_equity, equity_bought, price_bought, ss);
 				} // if verbose == YES_VERBOSE
 			} // if can_trade(order, market_cpy.top()
 
-			market_cpy.push(market_ptr->top());
+			if (market_ptr->top()->get_quantity()) {
+				market_cpy.push(market_ptr->top());
+			}
+			else {
+				delete market_ptr->top();
+			}
+
 			market_ptr->pop();
 		} // while
 
 		while (!market_cpy.empty()) {
-			if (market_cpy.top()->get_quantity()) {
-				market_ptr->push(market_cpy.top());
+//			if (market_cpy.front()->get_quantity()) {
+				market_ptr->push(market_cpy.front());
 				market_cpy.pop();
-			}
-			else {
-				delete market_cpy.top();
-				market_cpy.pop();
-			}
+//			}
+//			else {
+//				delete market_cpy.front();
+//				market_cpy.pop();
+//			}
 		}
 
 		if (order->get_quantity()) {
@@ -386,46 +417,6 @@ void make_matches(vector <Sellpq>* s_market, vector <Buypq>* b_market, Order* or
 			delete order; order = nullptr;
 		}
 	}
-//		while (!market_cpy.empty() && order->get_quantity()) {
-//
-//			if (order->get_price() > market_cpy.top()->get_price()) {
-//				break;
-//			}
-//
-//			if (can_trade(order, market_cpy.top())) {
-//				++orders_processed;
-//
-//				int market_client = market_cpy.top()->get_client()->get_client_id();
-//
-//				int equity_bought = (order->get_quantity() <= market_cpy.top()->get_quantity()) ? order->get_quantity() : market_cpy.top()->get_quantity();
-//				int price_bought = market_cpy.top()->get_price();
-//				int total_spent = equity_bought * price_bought;
-//
-//				order->change_quantity(equity_bought);
-//				market_cpy.top()->change_quantity(equity_bought);
-//
-//				clients->at(current_client).add_sold(equity_bought);
-//				clients->at(current_client).add_net_value(total_spent);
-//				clients->at(market_client).add_bought(equity_bought);
-//				clients->at(market_client).add_net_value(-total_spent);
-//
-//				order->get_equity()->add_price(price_bought);
-//
-//				if (verbose == YES_VERBOSE) {
-//					output_verbose(market_client, current_client, current_equity, equity_bought, price_bought, ss);
-//				} // if verbose == YES_VERBOSE
-//			} // if can_trade(order, market_cpy.top()
-//
-//			market_cpy.pop();
-//		} // while
-//
-//		if (order->get_quantity()) {
-//			s_market->at(current_equity).push(order);
-//		} // if
-//		else {
-//			delete order; order = nullptr;
-//		}
-//	}
 
 	return;
 } // make_matches
@@ -458,9 +449,9 @@ bool can_trade(Order* ord1, Order* ord2) {
 } // can_trade
 
 void output_verbose(int buying_client, int selling_client, int equity, int num_shares,
-					int price, ostringstream* ss) {
+					int price, ostringstream &ss) {
 
-	*ss << "Client " << buying_client << " purchased " << num_shares << " shares of Equity " << equity << " from Client " << selling_client << " for $" << price << "/share\n";
+	ss << "Client " << buying_client << " purchased " << num_shares << " shares of Equity " << equity << " from Client " << selling_client << " for $" << price << "/share\n";
 
 	return;
 } // output_verbose

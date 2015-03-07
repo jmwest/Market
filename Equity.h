@@ -37,7 +37,6 @@ public:
 	void add_min(int timestamp, int price);
 	void add_max(int timestamp, int price);
 	int get_median();
-//	int get_matches();
 	int get_min_time();
 	int get_max_time();
 };
@@ -64,11 +63,11 @@ int Equity::get_equity_id() {
 }
 
 void Equity::add_price(int price) {
-	
-	vector<int>::iterator it = lower_bound(match_prices.begin(), match_prices.end(), price);
-	
+
+	vector<int>::iterator it = upper_bound(match_prices.begin(), match_prices.end(), price);
+
 	match_prices.insert(it, price);
-	
+
 	return;
 }
 
@@ -148,11 +147,6 @@ int Equity::get_median() {
 		return (one + two) / 2;
 	}
 }
-//
-//int Equity::get_matches() {
-//	
-//	return int(match_prices.size());
-//}
 
 int Equity::get_min_time() {
 

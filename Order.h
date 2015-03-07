@@ -57,20 +57,12 @@ public:
 			return false;
 		}
 		else {
-//			if (ord1->get_timestamp() > ord2->get_timestamp()) {
-//				return true;
-//			}
-//			else if (ord1->get_timestamp() < ord2->get_timestamp()) {
-//				return false;
-//			}
-//			else {
-				if (ord1->get_order_number() > ord2->get_order_number()) {
-					return true;
-				}
-				else {
-					return false;
-				}
-//			}
+			if (ord1->get_order_number() > ord2->get_order_number()) {
+				return true;
+			}
+			else {
+				return false;
+			}
 		}
 	}
 };
@@ -85,20 +77,12 @@ public:
 			return false;
 		}
 		else {
-//			if (ord1->get_timestamp() > ord2->get_timestamp()) {
-//				return true;
-//			}
-//			else if (ord1->get_timestamp() < ord2->get_timestamp()) {
-//				return false;
-//			}
-//			else {
-				if (ord1->get_order_number() > ord2->get_order_number()) {
-					return true;
-				}
-				else {
-					return false;
-				}
-//			}
+			if (ord1->get_order_number() > ord2->get_order_number()) {
+				return true;
+			}
+			else {
+				return false;
+			}
 		}
 	}
 };
