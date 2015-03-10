@@ -9,6 +9,9 @@
 #ifndef EECS_281_Project_2_Client_h
 #define EECS_281_Project_2_Client_h
 
+// This is the Client class. It contains a client ID,
+// a number bought, sold, and the net value of purchases
+// made by the client.
 class Client {
 private:
 	int client_id;

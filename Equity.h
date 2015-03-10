@@ -15,6 +15,9 @@
 
 using namespace std;
 
+// This is the Equity class. It contains the min and max values
+// for the time traveler output, along with two priority queues
+// that contain the median data for the Equity.
 class Equity {
 private:
 	struct TimeTraveler {

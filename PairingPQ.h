@@ -2,7 +2,8 @@
 #define PAIRING_PQ_H
 
 #include "Eecs281PQ.h"
-
+#include <stack>
+#include <iostream>
 //A specialized version of the 'priority_queue' ADT implemented as a pairing priority_queue.
 template<typename TYPE, typename COMP_FUNCTOR = std::less<TYPE> >
 class PairingPQ : public Eecs281PQ<TYPE, COMP_FUNCTOR> {
@@ -145,6 +146,7 @@ PairingPQ<TYPE, COMP_FUNCTOR>& PairingPQ<TYPE, COMP_FUNCTOR>::operator= (const P
 		// create new tree
 		if (rhs.root) {
 			q_size = rhs.q_size;
+
 			root = build_tree(rhs.root);
 		}
 	}
@@ -166,14 +168,18 @@ void PairingPQ<TYPE, COMP_FUNCTOR>::pop() {
 	if (root) {
 		Node* first = root->child;
 		Node* current = first;
-		Node* next = current->sibling;
+		Node* next = nullptr;
+
+		if (current) {
+			next = current->sibling;
+		}
 
 		std::vector <Node*> kids;
 
 		delete root; root = nullptr;
 
 		// first pass
-		for (int i = 0; current; ++i) {
+		while (current) {
 
 			if (current->sibling) {
 				next = current->sibling->sibling;
@@ -258,12 +264,34 @@ typename PairingPQ<TYPE, COMP_FUNCTOR>::Node* PairingPQ<TYPE, COMP_FUNCTOR>::bui
 
 	Node* mytree = new Node(other->elt);
 
-	if (other->sibling) {
-		mytree->sibling = build_tree(other->sibling);
-	}
+//	if (other->sibling) {
+//		mytree->sibling = build_tree(other->sibling);
+//	}
+//
+//	if (other->child) {
+//		mytree->child = build_tree(other->child);
+//	}
+
+	std::stack <Node*> s;
+	Node* current;
 
 	if (other->child) {
-		mytree->child = build_tree(other->child);
+		s.push(other->child);
+	}
+
+	while (!s.empty()) {
+		current = new Node(s.top()->elt);
+		s.pop();
+		
+		if (current->sibling) {
+			s.push(current->sibling);
+		}
+		
+		if (current->child) {
+			s.push(current->child);
+		}
+		
+		mytree = meld(mytree, current);
 	}
 
 	return mytree;

@@ -16,6 +16,9 @@
 
 using namespace std;
 
+// This is the Order class. It is made up of an order
+// passed into the program. Orders contain a timestamp,
+// client, equity, price, and quantity.
 class Order {
 public:
 	enum Transaction {NONE, BUY, SELL};
@@ -49,15 +52,15 @@ private:
 
 class BuyOrderComparison {
 public:
-	bool operator () (Order* ord1, Order* ord2) {
-		if (ord1->get_price() < ord2->get_price()) {
+	bool operator () (Order &ord1, Order &ord2) {
+		if (ord1.get_price() < ord2.get_price()) {
 			return true;
 		}
-		else if (ord1->get_price() > ord2->get_price()) {
+		else if (ord1.get_price() > ord2.get_price()) {
 			return false;
 		}
 		else {
-			if (ord1->get_order_number() > ord2->get_order_number()) {
+			if (ord1.get_order_number() > ord2.get_order_number()) {
 				return true;
 			}
 			else {
@@ -69,15 +72,15 @@ public:
 
 class SellOrderComparison {
 public:
-	bool operator () (Order* ord1, Order* ord2) {
-		if (ord1->get_price() > ord2->get_price()) {
+	bool operator () (Order &ord1, Order &ord2) {
+		if (ord1.get_price() > ord2.get_price()) {
 			return true;
 		}
-		else if (ord1->get_price() < ord2->get_price()) {
+		else if (ord1.get_price() < ord2.get_price()) {
 			return false;
 		}
 		else {
-			if (ord1->get_order_number() > ord2->get_order_number()) {
+			if (ord1.get_order_number() > ord2.get_order_number()) {
 				return true;
 			}
 			else {
