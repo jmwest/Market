@@ -264,14 +264,6 @@ typename PairingPQ<TYPE, COMP_FUNCTOR>::Node* PairingPQ<TYPE, COMP_FUNCTOR>::bui
 
 	Node* mytree = new Node(other->elt);
 
-//	if (other->sibling) {
-//		mytree->sibling = build_tree(other->sibling);
-//	}
-//
-//	if (other->child) {
-//		mytree->child = build_tree(other->child);
-//	}
-
 	std::stack <Node*> s;
 	Node* current;
 
