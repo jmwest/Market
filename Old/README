@@ -1,0 +1,9 @@
+Welcome to Project 2 - Stocks on Stocks on Stocks!
+Files in this folder:
+
+BinaryPQ.h: Header file for binary heap priority queue. Put your code in here where stated.
+Eecs281PQ.h: Header file for generic EECS281 priority queue. The other PQ's derive from this class. Do not change this file!
+Makefile: This is the "Yet Another Makefile". We are providing it in this folder because it will handle compiling of testPq.cpp as well as your own project files. USE ANOTHER MAKEFILE AT YOUR OWN RISK
+PairingPQ.h: Header file for pairing heap priority queue. Put your code in here where stated.
+SortedPQ.h: Header file for sorted array priority queue. Put your code in here where stated.
+testPQ.cpp: Compile this test against your .h files to make sure they compile. Note how the eecs281 priority queues can be constructed with the different types.  We suggest adding to this file or creating your own test cases to test your priority queue implementations. If you add your own test cases, their names must start with test for the Makefile to be able to compile all of your files. 

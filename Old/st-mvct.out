@@ -1,0 +1,27 @@
+Processing orders...
+Client 0 purchased 22 shares of Equity 2 from Client 3 for $100/share
+Median match price of Equity 2 at time 3 is $100
+Client 1 purchased 15 shares of Equity 1 from Client 1 for $200/share
+Client 1 purchased 5 shares of Equity 1 from Client 3 for $200/share
+Median match price of Equity 1 at time 4 is $200
+Median match price of Equity 2 at time 4 is $100
+Client 3 purchased 5 shares of Equity 1 from Client 3 for $50/share
+Median match price of Equity 1 at time 5 is $200
+Median match price of Equity 2 at time 5 is $100
+Client 2 purchased 15 shares of Equity 0 from Client 0 for $80/share
+Client 0 purchased 10 shares of Equity 1 from Client 3 for $100/share
+Median match price of Equity 0 at time 6 is $80
+Median match price of Equity 1 at time 6 is $150
+Median match price of Equity 2 at time 6 is $100
+---End of Day---
+Orders Processed: 6
+---Client Info---
+Client 0 bought 32 and sold 15 for a net transfer of $-2000
+Client 1 bought 20 and sold 15 for a net transfer of $-1000
+Client 2 bought 15 and sold 0 for a net transfer of $-1200
+Client 3 bought 5 and sold 42 for a net transfer of $4200
+---Time Travelers---
+A time traveler would buy shares of Equity 0 at time: -1 and sell these shares at time: -1
+A time traveler would buy shares of Equity 1 at time: 4 and sell these shares at time: 6
+A time traveler would buy shares of Equity 2 at time: 3 and sell these shares at time: 6
+A time traveler would buy shares of Equity 3 at time: -1 and sell these shares at time: -1
